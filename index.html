@@ -187,6 +187,16 @@ select{width:100%;border:1.5px solid var(--line);background:var(--surface2);colo
 .res .links{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
 .res .links a{font-size:14px;font-weight:700;color:var(--brand);border:1.5px solid var(--brand);border-radius:999px;padding:5px 12px;text-decoration:none}
 .hl-tag{font-size:12px;font-weight:700;background:var(--amber);color:var(--amberInk);border-radius:999px;padding:1px 8px}
+.consent{margin-top:22px;border-top:1px solid var(--line);padding-top:16px}
+.consent h3{font-size:16px}
+.ck{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:var(--body);margin:10px 0}
+.ck input{margin-top:4px;width:18px;height:18px;accent-color:var(--brand);flex:none}
+.consent .field{margin-top:12px}
+.notice-box{background:var(--surface2);border-radius:12px;padding:10px 14px;font-size:13px;color:var(--body);margin-top:10px}
+.notice-box summary{cursor:pointer;font-weight:700;color:var(--ink)}
+.notice-box ol{margin:8px 0 0;padding-left:20px}
+.notice-box li{margin:4px 0}
+.saved{font-size:13px;color:var(--muted);margin-top:14px;text-align:center}
 .hotline{margin-top:14px;border-radius:14px;padding:12px 14px;background:var(--sys);border:1.5px dashed var(--sysLine);font-size:14px;color:var(--body)}
 .hotline b{color:var(--ink)}
 .src{font-size:12px;color:var(--muted);margin-top:12px}
@@ -281,7 +291,7 @@ function renderWelcome(){
     el("p",{class:"notice",text:"這是公開示範版：評估結果由內建規則計算。正式版由 AI 依品種特性判讀並解讀飼主回覆，請參考 Demo 影片。"}),
     el("button",{class:"btn",onclick:()=>{step=0;renderStep();}},"開始評估"),
     el("button",{class:"btn ghost",style:"margin-top:10px",onclick:()=>{guideTab="adopt";resCat=null;renderGuidePage();}},"先看飼養須知"),
-    el("p",{class:"foot",text:"評估結果是幫你做準備，不是審查。不需要填寫姓名或電話。"})
+    el("p",{class:"foot",text:SHEET_ENDPOINT ? "評估結果是幫你做準備，不是審查。只有選擇接收關懷時才需要留下聯絡方式。" : "評估結果是幫你做準備，不是審查。不需要填寫姓名或電話。"})
   ));
 }
 
@@ -474,8 +484,48 @@ function openResources(cat){
   if (result){ tab = "guide"; renderResult(); } else renderGuidePage();
 }
 
+/* ---------- Google Sheets storage (public version only) ---------- */
+// 部署 Google Apps Script 後，把「網頁應用程式網址」貼在下面引號中；留空則完全不儲存資料。
+const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycby6FmoUQ3xVlUlw30RrLNBRwaTGlPoL6ZgdKR3_J3OOvw7dwx70frS7POzTFbGCsTeg8g/exec";
+// 個資告知事項：正式啟用前請填入實際內容
+const PRIVACY = {org:"東森寵物麥寮中興店、虎尾林森店、田中福安店", keep:"自蒐集日起 1 年，期滿即刪除，你也可以隨時要求提前刪除", contact:"麥寮中興店黃店長（05-6936133）、虎尾林森店賴店長（05-6332666）、田中福安店周店長（04-8750112）"};
+let PD = {share:false, care:false, name:"", phone:"", agree:false};
+let caseNo = null, saveState = "";
+function consentOk(){ return !PD.care || (PD.name.trim() && PD.phone.trim() && PD.agree); }
+function willSave(){ return !!SHEET_ENDPOINT && (PD.share || (PD.care && PD.agree)); }
+function postSheet(type, row){
+  if (!SHEET_ENDPOINT) return Promise.resolve(false);
+  return fetch(SHEET_ENDPOINT, {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify({type, row})})
+    .then(()=>true).catch(()=>false);
+}
+function consentBlock(refresh){
+  const box = el("div",{class:"consent"});
+  const draw = () => {
+    box.replaceChildren(el("h3",{text:"資料使用（皆為選填）"}));
+    const ck = (key, text) => { const i = el("input",{type:"checkbox"}); i.checked = PD[key]; i.addEventListener("change",()=>{ PD[key]=i.checked; draw(); refresh(); }); return el("label",{class:"ck"}, i, el("span",{text})); };
+    box.append(ck("share","提供匿名評估資料，協助我們改善服務（不含姓名與電話）"));
+    box.append(ck("care","我想收到帶回家後第 7、30、90 天的關懷訊息"));
+    if (PD.care){
+      const inp = (key, label, ph, max) => { const id="pd_"+key; const i = el("input",{type:"text",id,placeholder:ph,maxlength:String(max),value:PD[key]}); i.addEventListener("input",()=>{ PD[key]=i.value; refresh(); }); return el("div",{class:"field"}, el("label",{for:id,text:label}), i); };
+      box.append(inp("name","稱呼","例：王小姐",20), inp("phone","手機或 LINE ID","方便我們聯繫你",30));
+      box.append(el("details",{class:"notice-box"}, el("summary",{text:"個人資料蒐集告知事項"}), el("ol",{},
+        el("li",{text:`蒐集者：${PRIVACY.org}。`}),
+        el("li",{text:"蒐集目的：飼養適配評估、帶回家後的關懷與轉介服務、服務改善統計。"}),
+        el("li",{text:"個人資料類別：稱呼、聯絡方式，以及本次評估的填答內容。"}),
+        el("li",{text:`利用期間：${PRIVACY.keep}；地區：臺灣；對象：${PRIVACY.org}；方式：電子儲存，以電話或訊息聯繫。`}),
+        el("li",{text:`你可以隨時查詢、閱覽、複製、補充更正，或要求停止蒐集、處理、利用及刪除你的資料，請洽：${PRIVACY.contact}。`}),
+        el("li",{text:"不提供聯絡方式不影響評估功能，只是無法收到關懷訊息。"})
+      )));
+      box.append(ck("agree","我已閱讀並同意上述個人資料的蒐集、處理及利用"));
+    }
+  };
+  draw();
+  return box;
+}
+
 /* ---------- Questionnaire ---------- */
 function stepDone(s){
+  if (s===STEPS.length-1 && SHEET_ENDPOINT && !consentOk()) return false;
   return STEPS[s].fields.every(f => f.type==="text" || (f.type==="multi" ? (A[f.k]||[]).length>0 : !!A[f.k]));
 }
 function renderStep(){
@@ -530,6 +580,7 @@ function renderStep(){
     panel.append(wrap);
   }
   const back = el("button",{class:"btn ghost",onclick:()=>{ if(step>0){step--;renderStep();} else renderWelcome(); }},"上一步");
+  if (step===STEPS.length-1 && SHEET_ENDPOINT) panel.append(consentBlock(refresh));
   panel.append(el("div",{class:"row nav"}, back, next));
   refresh();
   app.append(panel);
@@ -697,6 +748,18 @@ async function evaluate(){
   result = out || rule;
   makeCurrentCase();
   tab = "result"; chat = []; chatDay = null;
+  caseNo = Math.random().toString(36).slice(2,8).toUpperCase();
+  saveState = "";
+  if (willSave()){
+    const care = PD.care && PD.agree;
+    saveState = "sending";
+    postSheet("evaluation", [caseNo, A.county, A.species, A.breed||"", A.age, A.housing, A.space, A.landlord, A.companion, A.away, A.monthly, A.emergency,
+      (A.members||[]).join("、"), A.consent, A.allergy, A.experience, (A.changes||[]).join("、"), result.score, result.level,
+      result.risks.map(r=>r.title).join("、"), (result.matches||[]).map(m=>m.type).join("、"), usedAI?"AI":"規則",
+      care?"是":"否", care?PD.name.trim():"", care?PD.phone.trim():"", care?new Date().toISOString():""])
+      .then(ok=>{ saveState = ok ? "sent" : "failed"; if (tab==="result" && view==="owner") renderResult(); });
+  }
+  if (currentCase) currentCase.id = caseNo;
   setMode();
   renderResult();
 }
@@ -719,7 +782,7 @@ function renderResult(){
   if (tab==="care") viewCare(p);
   if (tab==="guide") viewGuide(p);
   app.append(p);
-  app.append(el("div",{class:"row",style:"margin-top:14px"}, el("button",{class:"btn ghost",onclick:()=>{A={members:[],changes:[]};result=null;step=-1;cases=cases.filter(c=>!c.current);currentCase=null;setMode();renderWelcome();}},"重新評估")));
+  app.append(el("div",{class:"row",style:"margin-top:14px"}, el("button",{class:"btn ghost",onclick:()=>{A={members:[],changes:[]};result=null;step=-1;cases=cases.filter(c=>!c.current);currentCase=null;PD={share:false,care:false,name:"",phone:"",agree:false};caseNo=null;saveState="";setMode();renderWelcome();}},"重新評估")));
   app.append(el("p",{class:"foot",text:"原型展示用。評估結果僅供參考，不取代獸醫或專業人員的建議。"}));
 }
 function viewScore(p){
@@ -742,6 +805,7 @@ function viewScore(p){
   }
   const ul = el("ol",{class:"sugg"}); r.suggestions.forEach(t=>ul.append(el("li",{text:t})));
   p.append(el("div",{class:"sect"}, el("h2",{text:"建議你這樣準備"}), ul));
+  if (saveState) p.append(el("p",{class:"saved",text: saveState==="sending" ? "正在送出評估紀錄…" : saveState==="sent" ? `已送出評估紀錄（編號 ${caseNo}）` : "評估紀錄送出失敗，請確認網路連線"}));
   if (r.matches && r.matches.length){
     const m = el("div",{class:"sect"}, el("h2",{text:"以你的條件，比較合拍的毛孩"}), el("p",{class:"muted",text: r.level==="低風險" ? "你的條件已經準備得不錯，這些類型會讓你們更合拍。" : "與其勉強配合，不如找一個跟你生活節奏相符的夥伴。"}));
     r.matches.forEach(x=>m.append(el("div",{class:"match"}, el("h3",{}, el("span",{text:x.type}), x.adopt ? el("span",{class:"adopt-tag",text:"可考慮認養"}) : null), el("p",{text:x.reason}))));
@@ -878,6 +942,7 @@ function makeCurrentCase(){
   cases.unshift(currentCase);
 }
 function updateCase(text, j){
+  if (willSave() && caseNo) postSheet("checkin", [caseNo, chatDay, text, j.level, (j.signals||[]).join("、"), j.referral||""]);
   if (!currentCase) return;
   Object.assign(currentCase, {day:chatDay, level:j.level, signals:j.signals.length?j.signals:["無明顯風險訊號"], referral:j.referral,
     status: j.level==="低風險" ? "定期關懷" : "待聯繫"});
