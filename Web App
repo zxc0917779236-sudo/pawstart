@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PawStart 毛孩好起點｜飼養適配評估原型</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --bg:#E8EEEA;--surface:#FBFCFA;--surface2:#F0F4F1;--ink:#17312F;--body:#3B504E;--muted:#5D6E6B;
+  --line:#D2DCD7;--brand:#1F4A45;--brandInk:#F4F8F6;--amber:#E39B45;--amberInk:#2A1A06;
+  --low:#2A7362;--mid:#A3600F;--high:#A9361F;--chip:#E1EAE5;--chipOn:#1F4A45;--chipOnInk:#F4F8F6;
+  --chatbg:#DAE5DF;--bot:#FFFFFF;--me:#CDEAD7;--sys:#FFF6EA;--sysLine:#E9C79A;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1918;--surface:#162523;--surface2:#1C2D2B;--ink:#E6EFEB;--body:#C2D2CD;--muted:#94A6A1;
+    --line:#2B3F3C;--brand:#8FCFC2;--brandInk:#0E1918;--amber:#E9AA5E;--amberInk:#2A1A06;
+    --low:#6CC4AE;--mid:#E6A650;--high:#F2836E;--chip:#213532;--chipOn:#8FCFC2;--chipOnInk:#0E1918;
+    --chatbg:#111F1D;--bot:#203230;--me:#2A5243;--sys:#2B2418;--sysLine:#6E5530;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1918;--surface:#162523;--surface2:#1C2D2B;--ink:#E6EFEB;--body:#C2D2CD;--muted:#94A6A1;
+  --line:#2B3F3C;--brand:#8FCFC2;--brandInk:#0E1918;--amber:#E9AA5E;--amberInk:#2A1A06;
+  --low:#6CC4AE;--mid:#E6A650;--high:#F2836E;--chip:#213532;--chipOn:#8FCFC2;--chipOnInk:#0E1918;
+  --chatbg:#111F1D;--bot:#203230;--me:#2A5243;--sys:#2B2418;--sysLine:#6E5530;
+  color-scheme:dark;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:'Noto Sans TC','PingFang TC','Microsoft JhengHei',Arial,sans-serif;font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--brand)}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--brand);color:var(--brandInk)}
+.bar{max-width:520px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:12px}
+.logo{font-weight:900;font-size:20px;letter-spacing:.01em}
+.logo small{font-weight:500;font-size:14px;margin-left:6px;opacity:.85}
+.mode{margin-left:auto;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--amber);color:var(--amberInk)}
+
+main{max-width:520px;margin:0 auto;padding:20px 16px 40px}
+.panel{background:var(--surface);border-radius:22px;padding:24px 22px;border:1px solid var(--line)}
+h1{font-size:30px;line-height:1.3;margin:0 0 12px;font-weight:900}
+h2{font-size:22px;line-height:1.35;margin:0 0 6px;font-weight:900}
+h3{font-size:17px;margin:0 0 8px;font-weight:700}
+p{margin:0 0 12px;color:var(--body)}
+.muted{color:var(--muted);font-size:14px}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:14px 18px;font-weight:700;font-size:17px;background:var(--brand);color:var(--brandInk)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--brand);border:2px solid var(--brand)}
+.row{display:flex;gap:10px}
+.row .btn{flex:1}
+
+.hero-paw{font-size:44px;line-height:1;margin-bottom:12px}
+.promises{list-style:none;padding:0;margin:18px 0 22px;display:grid;gap:10px}
+.promises li{background:var(--surface2);border-radius:14px;padding:12px 14px;color:var(--body);font-size:15px}
+.promises b{color:var(--ink)}
+
+.progress{height:8px;border-radius:99px;background:var(--chip);overflow:hidden;margin:4px 0 18px}
+.progress span{display:block;height:100%;background:var(--amber);border-radius:99px;transition:width .3s ease}
+.stepno{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:4px}
+.field{margin:18px 0 0}
+.field label,.field .lab{display:block;font-weight:700;font-size:15px;margin-bottom:8px;color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--chip);color:var(--ink);border-radius:999px;padding:8px 14px;font-size:15px;line-height:1.3}
+.chip[aria-pressed="true"]{background:var(--chipOn);color:var(--chipOnInk);border-color:var(--chipOn);font-weight:700}
+input[type=text],textarea{width:100%;border:1.5px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:12px;padding:11px 14px;font:inherit}
+.nav{margin-top:26px}
+
+.loading{text-align:center;padding:48px 22px}
+.dots{display:inline-flex;gap:8px;margin:12px 0 18px}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--amber);animation:b 1s infinite ease-in-out}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes b{0%,80%,100%{transform:scale(.5);opacity:.4}40%{transform:scale(1);opacity:1}}
+
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 52px);z-index:4}
+.tab{border:0;background:transparent;color:var(--muted);border-radius:10px;padding:9px 4px;font-size:14px;font-weight:700}
+.tab[aria-selected="true"]{background:var(--brand);color:var(--brandInk)}
+
+.scorebox{display:flex;gap:18px;align-items:center}
+.ring{flex:none;width:118px;height:118px;position:relative}
+.ring svg{width:118px;height:118px;transform:rotate(-90deg)}
+.ring .val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .val b{font-size:34px;line-height:1;font-weight:900}
+.ring .val span{font-size:12px;color:var(--muted)}
+.level{display:inline-block;font-weight:900;font-size:15px;padding:3px 12px;border-radius:999px;margin-bottom:8px;color:#fff}
+.lv-low{background:var(--low)}.lv-mid{background:var(--mid)}.lv-high{background:var(--high)}
+:root[data-theme="dark"] .level{color:#0E1918}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .level{color:#0E1918}}
+.dims{display:grid;gap:12px;margin-top:18px}
+.dim .top{display:flex;justify-content:space-between;font-size:14px;font-weight:700}
+.dim .top span:last-child{color:var(--muted);font-weight:500}
+.meter{height:10px;border-radius:99px;background:var(--chip);overflow:hidden;margin:5px 0 3px}
+.meter span{display:block;height:100%;border-radius:99px}
+.dim small{color:var(--muted);font-size:13px}
+.sect{margin-top:16px}
+.risk{border-left:5px solid var(--high);background:var(--surface2);border-radius:12px;padding:12px 14px;margin-top:10px}
+.risk h3{margin-bottom:4px}
+.risk p{margin:0;font-size:15px}
+.sugg{margin:8px 0 0;padding-left:20px;color:var(--body)}
+.sugg li{margin:6px 0}
+
+.cat{margin-top:12px;background:var(--surface2);border-radius:14px;padding:14px}
+.cat ul{margin:6px 0 0;padding:0;list-style:none;display:grid;gap:6px}
+.cat li label{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:var(--body)}
+.cat input{margin-top:5px;width:18px;height:18px;accent-color:var(--brand)}
+
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:15px}
+th,td{text-align:left;padding:10px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:13px;color:var(--muted)}
+td.n{white-space:nowrap;font-weight:700;color:var(--ink)}
+td small{color:var(--muted)}
+.budget{margin-top:16px;border-radius:14px;padding:14px;background:var(--surface2)}
+.budget .verdict{font-weight:700;margin:6px 0 0}
+
+.chat{background:var(--chatbg);border-radius:18px;padding:14px;min-height:260px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:84%;padding:10px 13px;border-radius:16px;font-size:15px;line-height:1.55;white-space:pre-wrap}
+.msg.bot{background:var(--bot);color:var(--ink);border-top-left-radius:4px;align-self:flex-start}
+.msg.me{background:var(--me);color:var(--ink);border-top-right-radius:4px;align-self:flex-end}
+.msg .who{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:2px}
+.sys{align-self:stretch;background:var(--sys);border:1.5px dashed var(--sysLine);border-radius:14px;padding:10px 13px;font-size:14px;color:var(--body)}
+.sys b{color:var(--ink)}
+.sys .tagline{font-size:12px;font-weight:700;color:var(--muted);display:block;margin-bottom:4px}
+.days{display:flex;gap:8px;margin:12px 0}
+.days .chip{flex:1;text-align:center}
+.quick{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.quick .chip{font-size:13px;padding:6px 11px}
+.composer{display:flex;gap:8px;margin-top:8px}
+.composer input{flex:1}
+.composer .btn{width:auto;padding:10px 16px;font-size:15px}
+.foot{margin-top:18px;font-size:12px;color:var(--muted);text-align:center}
+.err{color:var(--high);font-size:14px;margin-top:8px}
+.notice{background:var(--surface2);border-left:5px solid var(--amber);border-radius:12px;padding:10px 14px;font-size:14px;color:var(--body);margin:0 0 16px}
+</style>
+</head>
+<body>
+<header><div class="bar"><div class="logo">PawStart<small>毛孩好起點</small></div><span class="mode" id="mode">公開示範版</span></div></header>
+<main id="app" aria-live="polite"></main>
+
+<script>
+(function(){
+"use strict";
+const STEPS = [
+  {title:"想養的毛孩", hint:"先說說你想帶回家的是誰。", fields:[
+    {k:"species", label:"種類", type:"single", opts:["狗","貓"]},
+    {k:"breed", label:"品種或類型（選填）", type:"text", ph:"例：柴犬、米克斯、還沒決定"},
+    {k:"age", label:"年齡", type:"single", opts:["幼年（1 歲以下）","成年","高齡（7 歲以上）"]}
+  ]},
+  {title:"居住環境", hint:"住的地方，決定毛孩能不能安穩待下來。", fields:[
+    {k:"housing", label:"目前住處", type:"single", opts:["租屋","自有住宅","與家人同住"]},
+    {k:"space", label:"空間大小", type:"single", opts:["套房","公寓","有庭院的透天"]},
+    {k:"landlord", label:"房東或家人同意養嗎？", type:"single", opts:["已經同意","還沒確認","不需要詢問"]}
+  ]},
+  {title:"時間與陪伴", hint:"照實回答就好，這不是考試。", fields:[
+    {k:"companion", label:"每天能專心陪伴的時間", type:"single", opts:["不到 1 小時","1–3 小時","3 小時以上"]},
+    {k:"away", label:"平日家裡沒人的時間", type:"single", opts:["6 小時以內","6–10 小時","10 小時以上"]}
+  ]},
+  {title:"經濟準備", hint:"第一年通常是花費最多的一年。", fields:[
+    {k:"monthly", label:"每月願意為毛孩花費", type:"single", opts:["2,000 元以下","2,000–4,000 元","4,000 元以上"]},
+    {k:"emergency", label:"有沒有緊急醫療預備金？", type:"single", opts:["有，至少 1 萬元","還沒有"]}
+  ]},
+  {title:"家庭成員", hint:"一起住的人，都會是毛孩的家人。", fields:[
+    {k:"members", label:"同住成員（可複選）", type:"multi", opts:["獨居","伴侶或室友","幼兒","長輩","其他寵物"], excl:["獨居"]},
+    {k:"consent", label:"大家都同意養嗎？", type:"single", opts:["大家都同意","還有人不確定"]},
+    {k:"allergy", label:"家中有人對貓狗過敏嗎？", type:"single", opts:["沒有","有","不確定"]}
+  ]},
+  {title:"經驗與未來規劃", hint:"毛孩會陪你 10 年以上，想想接下來的生活。", fields:[
+    {k:"experience", label:"飼養經驗", type:"single", opts:["第一次養","以前養過"]},
+    {k:"changes", label:"未來一年可能的生活變動（可複選）", type:"multi", opts:["搬家","結婚或新生兒","換工作","出國或長期外派","都沒有"], excl:["都沒有"]}
+  ]}
+];
+const DIMS = ["時間陪伴","居住環境","經濟準備","家庭共識","經驗與變動"];
+const CHECKINS = {
+  7:"嗨！毛孩來家裡一週了 🐾\n吃飯、睡覺、上廁所都還順利嗎？有沒有讓你頭痛的地方？",
+  30:"一個月了！這段時間的花費，跟你原本預期的差不多嗎？\n毛孩有沒有出現吠叫、破壞或亂尿尿的狀況？",
+  90:"三個月了，最近生活有什麼變化嗎？例如工作、住處或家裡成員。\n毛孩跟大家相處得如何？"
+};
+const QUICK = ["都很順利，牠很快就適應了","牠白天一直叫，鄰居來抗議了","下個月要搬家，新房東不讓養","開銷比想像多很多，有點吃不消"];
+
+const app = document.getElementById("app");
+const modeEl = document.getElementById("mode");
+let A = {members:[], changes:[]};
+let step = -1, tab = "result", result = null, usedAI = false;
+let chat = [], chatDay = null, chatBusy = false;
+let sample = null, aiBlocked = false;
+
+if (window.claude && typeof window.claude.use === "function") {
+  window.claude.use("sample").then(s => { sample = s; setMode(); }).catch(() => {});
+}
+function setMode(){
+  if (result) modeEl.textContent = usedAI ? "AI 判讀" : "規則示範模式";
+  else modeEl.textContent = (sample && !aiBlocked) ? "AI 已連線" : "公開示範版";
+}
+function el(tag, attrs, ...kids){
+  const n = document.createElement(tag);
+  if (attrs) for (const [k,v] of Object.entries(attrs)) {
+    if (k === "class") n.className = v;
+    else if (k === "text") n.textContent = v;
+    else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+    else if (v !== false && v != null) n.setAttribute(k, v === true ? "" : v);
+  }
+  for (const c of kids.flat()) if (c != null) n.append(c.nodeType ? c : document.createTextNode(c));
+  return n;
+}
+function clear(){ app.replaceChildren(); window.scrollTo(0,0); }
+
+/* ---------- Welcome ---------- */
+function renderWelcome(){
+  clear();
+  app.append(el("div",{class:"panel"},
+    el("div",{class:"hero-paw","aria-hidden":"true"},"🐾"),
+    el("h1",{text:"帶毛孩回家前，花 5 分鐘確認你們合不合拍"}),
+    el("p",{text:"回答 6 組簡單問題，AI 會根據你的生活條件，指出需要先準備的地方，並幫你整理第一年的準備清單與花費。"}),
+    el("ul",{class:"promises"},
+      el("li",{}, el("b",{text:"適配評估　"}), "看看時間、空間、預算與家人是否準備好了"),
+      el("li",{}, el("b",{text:"準備清單　"}), "依毛孩年齡與你的居住條件，列出要準備的品類"),
+      el("li",{}, el("b",{text:"關懷陪伴　"}), "帶回家後第 7、30、90 天，主動問候與提供協助")
+    ),
+    el("p",{class:"notice",text:"這是公開示範版：評估結果由內建規則計算。正式版由 AI 依品種特性判讀並解讀飼主回覆，請參考 Demo 影片。"}),
+    el("button",{class:"btn",onclick:()=>{step=0;renderStep();}},"開始評估"),
+    el("p",{class:"foot",text:"評估結果是幫你做準備，不是審查。不需要填寫姓名或電話。"})
+  ));
+}
+
+/* ---------- Questionnaire ---------- */
+function stepDone(s){
+  return STEPS[s].fields.every(f => f.type==="text" || (f.type==="multi" ? (A[f.k]||[]).length>0 : !!A[f.k]));
+}
+function renderStep(){
+  clear();
+  const S = STEPS[step];
+  const panel = el("div",{class:"panel"},
+    el("div",{class:"stepno",text:`第 ${step+1} 步，共 ${STEPS.length} 步`}),
+    el("div",{class:"progress",role:"progressbar","aria-valuemin":"0","aria-valuemax":String(STEPS.length),"aria-valuenow":String(step+1)}, el("span",{style:`width:${(step+1)/STEPS.length*100}%`})),
+    el("h2",{text:S.title}),
+    el("p",{class:"muted",text:S.hint})
+  );
+  const next = el("button",{class:"btn",onclick:()=>{ if(step<STEPS.length-1){step++;renderStep();} else evaluate(); }}, step<STEPS.length-1 ? "下一步" : "看評估結果");
+  const refresh = () => { next.disabled = !stepDone(step); };
+  for (const f of S.fields){
+    const wrap = el("div",{class:"field"});
+    if (f.type === "text"){
+      const id = "f_"+f.k;
+      const inp = el("input",{type:"text",id,placeholder:f.ph||"",maxlength:"30",value:A[f.k]||""});
+      inp.addEventListener("input",()=>{A[f.k]=inp.value.trim();});
+      wrap.append(el("label",{for:id,text:f.label}), inp);
+    } else {
+      const chips = el("div",{class:"chips",role:"group","aria-label":f.label});
+      const paint = () => chips.querySelectorAll(".chip").forEach(c=>{
+        const on = f.type==="multi" ? (A[f.k]||[]).includes(c.dataset.v) : A[f.k]===c.dataset.v;
+        c.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+      for (const o of f.opts){
+        const c = el("button",{type:"button",class:"chip","data-v":o,"aria-pressed":"false"},o);
+        c.addEventListener("click",()=>{
+          if (f.type==="single") A[f.k]=o;
+          else {
+            let cur = A[f.k] ? A[f.k].slice() : [];
+            if (cur.includes(o)) cur = cur.filter(x=>x!==o);
+            else if (f.excl && f.excl.includes(o)) cur = [o];
+            else { cur = cur.filter(x=>!(f.excl||[]).includes(x)); cur.push(o); }
+            A[f.k]=cur;
+          }
+          paint(); refresh();
+        });
+        chips.append(c);
+      }
+      paint();
+      wrap.append(el("span",{class:"lab",text:f.label}), chips);
+    }
+    panel.append(wrap);
+  }
+  const back = el("button",{class:"btn ghost",onclick:()=>{ if(step>0){step--;renderStep();} else renderWelcome(); }},"上一步");
+  panel.append(el("div",{class:"row nav"}, back, next));
+  refresh();
+  app.append(panel);
+}
+
+/* ---------- Rule engine (always computed; also the fallback) ---------- */
+const clamp = (v,a,b)=>Math.max(a,Math.min(b,Math.round(v)));
+function levelOf(s){ return s>=75 ? "低風險" : s>=55 ? "中風險" : "高風險"; }
+function ruleEval(a){
+  const dog = a.species==="狗", young = (a.age||"").startsWith("幼年"), senior=(a.age||"").startsWith("高齡");
+  let t = {"不到 1 小時":40,"1–3 小時":75,"3 小時以上":95}[a.companion] ?? 60;
+  let awayPen = {"6 小時以內":0,"6–10 小時":10,"10 小時以上":25}[a.away] ?? 0;
+  if (!dog) awayPen = Math.round(awayPen/2);
+  if (young && a.away==="10 小時以上") awayPen += 10;
+  t -= awayPen;
+  let l = {"租屋":80,"自有住宅":95,"與家人同住":88}[a.housing] ?? 80;
+  if (a.landlord==="還沒確認") l -= 30;
+  if (dog && a.space==="套房") l -= 15;
+  let m = {"2,000 元以下":45,"2,000–4,000 元":75,"4,000 元以上":92}[a.monthly] ?? 60;
+  if (a.emergency==="還沒有") m -= 20;
+  if (senior) m -= 10;
+  let f = 95;
+  if (a.consent==="還有人不確定") f -= 35;
+  if (a.allergy==="有") f -= 40; else if (a.allergy==="不確定") f -= 15;
+  if ((a.members||[]).includes("幼兒") && dog) f -= 5;
+  let e = 90;
+  if (a.experience==="第一次養") e -= 15;
+  e -= 15 * (a.changes||[]).filter(x=>x!=="都沒有").length;
+  const scores = [t,l,m,f,e].map(v=>clamp(v,20,100));
+  const score = clamp(scores.reduce((s,v)=>s+v,0)/scores.length,0,100);
+  const comments = [
+    scores[0]>=75?"陪伴時間充足":"獨處時間偏長，需規劃照顧方式",
+    scores[1]>=75?"居住條件穩定":"住處限制可能影響長期飼養",
+    scores[2]>=75?"預算準備充足":"預算或緊急預備金不足",
+    scores[3]>=75?"家人意見一致":"家中共識或過敏問題待確認",
+    scores[4]>=75?"生活規劃穩定":"經驗或生活變動需提前規劃"
+  ];
+  const RISK = [
+    {title:"陪伴時間不足", reason: dog ? "狗狗需要固定散步與陪伴，長時間獨處容易出現吠叫、破壞等行為問題。" : "貓咪雖較能獨處，仍需要每天互動與玩耍，長期孤單可能影響健康與情緒。"},
+    {title:"住處尚未確認", reason:"租屋若未取得房東同意，或空間與毛孩需求落差大，日後搬家或被要求送走的風險較高。"},
+    {title:"預算吃緊", reason:"第一年包含疫苗、結紮、用品等一次性支出，加上突發醫療，預算不足時最容易陷入兩難。"},
+    {title:"家人尚未有共識", reason:"同住家人有疑慮或有過敏狀況，帶回家後容易成為放棄飼養的主要原因。"},
+    {title:"生活即將變動", reason:"未來一年若有搬家、新生兒或外派等計畫，需要先想好毛孩的安置與照顧安排。"}
+  ];
+  const SUG = [
+    "先安排白天的照顧方式，例如安親服務、家人輪流或調整作息，再決定帶回家的時間。",
+    "帶回家前先取得房東書面同意，並確認新住處與社區的飼養規定。",
+    "先存下至少一萬元的緊急醫療預備金，並把第一年的一次性支出列入預算。",
+    "請家人一起討論分工，若有人可能過敏，先實際接觸毛孩一段時間再決定。",
+    "把未來一年的生活變動列出來，先想好每個情況下毛孩由誰照顧。"
+  ];
+  const order = scores.map((s,i)=>[s,i]).sort((x,y)=>x[0]-y[0]);
+  const risks = order.filter(([s])=>s<75).slice(0,3).map(([,i])=>RISK[i]);
+  const suggestions = order.filter(([s])=>s<75).slice(0,3).map(([,i])=>SUG[i]);
+  if (suggestions.length<3) suggestions.push("帶回家第一週保持作息固定，讓毛孩熟悉環境與家人。");
+  if (suggestions.length<3) suggestions.push("先預約一次健康檢查，建立毛孩的基本健康紀錄。");
+  const checklist = dog ? [
+    {category:"飲食",items:[young?"幼犬適用主食":senior?"高齡犬適用主食":"成犬主食","食碗與飲水器","零食或訓練獎勵"]},
+    {category:"居家",items:["睡墊或睡窩","圍欄或籠子","電線與易碎物收納"]},
+    {category:"外出",items:["牽繩與胸背帶","名牌","外出包或提籠"]},
+    {category:"清潔",items:["尿布墊","除臭清潔用品","梳子與指甲剪"]},
+    {category:"醫療與登記",items:["第一次健康檢查","預防針與驅蟲計畫","晶片植入與寵物登記"]}
+  ] : [
+    {category:"飲食",items:[young?"幼貓適用主食":senior?"高齡貓適用主食":"成貓主食","食碗與飲水器","濕食或零食"]},
+    {category:"居家",items:["貓砂盆與貓砂","貓抓板","可躲藏的空間","窗戶與陽台防護網"]},
+    {category:"外出",items:["外出提籠"]},
+    {category:"清潔",items:["貓砂鏟","除臭清潔用品","梳子與指甲剪"]},
+    {category:"醫療與登記",items:["第一次健康檢查","預防針與驅蟲計畫","結紮規劃"]}
+  ];
+  const costs = dog ? [
+    {item:"飲食",low:15000,high:30000,note:"依體型差異大"},
+    {item:"醫療與預防",low:8000,high:20000,note:"含預防針、驅蟲"},
+    {item:"用品",low:5000,high:12000,note:"第一年一次性較多"},
+    {item:"美容與訓練",low:3000,high:15000,note:"依毛量與需求"}
+  ] : [
+    {item:"飲食",low:10000,high:20000,note:"乾濕食比例影響大"},
+    {item:"醫療與預防",low:6000,high:15000,note:"含預防針、驅蟲"},
+    {item:"用品",low:6000,high:12000,note:"含貓砂消耗"},
+    {item:"美容與訓練",low:0,high:5000,note:"長毛貓較高"}
+  ];
+  return {score, level:levelOf(score), summary: score>=75 ? "整體條件準備得不錯，留意幾個細節就能好好開始。" : score>=55 ? "大致可行，但有幾件事建議帶回家前先處理。" : "目前有幾項關鍵條件還沒到位，建議先調整再決定。",
+    dimensions: DIMS.map((n,i)=>({name:n,score:scores[i],comment:comments[i]})), risks, suggestions, checklist, costs, costsIllustrative:true};
+}
+
+/* ---------- AI evaluation ---------- */
+function profileText(a){
+  return [
+    `想養：${a.species||"未填"}${a.breed?`（${a.breed}）`:""}，${a.age||"未填"}`,
+    `住處：${a.housing||"未填"}，${a.space||"未填"}，房東或家人同意：${a.landlord||"未填"}`,
+    `每天陪伴：${a.companion||"未填"}；平日家中無人：${a.away||"未填"}`,
+    `每月預算：${a.monthly||"未填"}；緊急醫療預備金：${a.emergency||"未填"}`,
+    `同住成員：${(a.members||[]).join("、")||"未填"}；家人是否同意：${a.consent||"未填"}；過敏：${a.allergy||"未填"}`,
+    `飼養經驗：${a.experience||"未填"}；未來一年生活變動：${(a.changes||[]).join("、")||"未填"}`
+  ].join("\n");
+}
+function buildPrompt(a, rule){
+  return `你是寵物用品門市的「飼養適配評估」助理，對象是準備帶貓狗回家的新手飼主。請用台灣繁體中文，語氣溫暖但誠實，重點放在「準備度」而不是評斷飼主。不可推薦任何品牌或特定商品，清單只寫品類。不做醫療診斷。
+
+飼主資料：
+${profileText(a)}
+
+規則引擎參考分數（0–100，越高越適配）：
+${rule.dimensions.map(d=>`${d.name}：${d.score}`).join("\n")}
+
+請以參考分數為基礎，考慮品種或類型的特性（例如運動量、體型、是否需要大量陪伴）做合理調整，每個面向調整幅度不超過 15 分。
+
+只回傳 JSON，不要任何其他文字或 Markdown，格式如下：
+{"score":整數0-100,"summary":"一句話總結，40字內","dimensions":[{"name":"時間陪伴","score":整數,"comment":"20字內"},{"name":"居住環境","score":整數,"comment":"20字內"},{"name":"經濟準備","score":整數,"comment":"20字內"},{"name":"家庭共識","score":整數,"comment":"20字內"},{"name":"經驗與變動","score":整數,"comment":"20字內"}],"risks":[{"title":"10字內","reason":"60字內，具體說明飼主條件與毛孩需求的落差"}],"suggestions":["具體可行的建議，45字內"],"checklist":[{"category":"飲食|居家|外出|清潔|醫療與登記|陪伴與訓練","items":["品類名稱"]}],"costs":[{"item":"飲食|醫療與預防|用品|美容與訓練","low":整數新台幣,"high":整數新台幣,"note":"15字內"}]}
+
+規則：risks 最多 3 項、依嚴重度排序，分數都在 75 以上時可以只給 1 項或空陣列；suggestions 3–4 項；checklist 4–6 類、每類 2–4 項，依種類、年齡與居住條件個人化；costs 為第一年粗估區間。score 為五個面向的平均。`;
+}
+function normalize(o, rule){
+  if (!o || typeof o!=="object") return null;
+  const dims = DIMS.map((n,i)=>{
+    const d = Array.isArray(o.dimensions) ? o.dimensions.find(x=>x&&x.name===n) : null;
+    return {name:n, score: d && Number.isFinite(+d.score) ? clamp(+d.score,0,100) : rule.dimensions[i].score, comment: d && typeof d.comment==="string" ? d.comment : rule.dimensions[i].comment};
+  });
+  const score = clamp(dims.reduce((s,d)=>s+d.score,0)/dims.length,0,100);
+  const strs = (x)=>Array.isArray(x)?x.filter(s=>typeof s==="string"&&s.trim()):[];
+  const risks = Array.isArray(o.risks) ? o.risks.filter(r=>r&&typeof r.title==="string").slice(0,3).map(r=>({title:r.title,reason:String(r.reason||"")})) : rule.risks;
+  const sugg = strs(o.suggestions).slice(0,4);
+  const checklist = Array.isArray(o.checklist) ? o.checklist.filter(c=>c&&typeof c.category==="string").map(c=>({category:c.category,items:strs(c.items).slice(0,5)})).filter(c=>c.items.length) : [];
+  const costs = Array.isArray(o.costs) ? o.costs.filter(c=>c&&typeof c.item==="string"&&Number.isFinite(+c.low)&&Number.isFinite(+c.high)).map(c=>({item:c.item,low:Math.max(0,Math.round(+c.low)),high:Math.max(0,Math.round(+c.high)),note:String(c.note||"")})) : [];
+  return {score, level:levelOf(score), summary: typeof o.summary==="string" ? o.summary : rule.summary, dimensions:dims, risks,
+    suggestions: sugg.length ? sugg : rule.suggestions, checklist: checklist.length ? checklist : rule.checklist, costs: costs.length ? costs : rule.costs, costsIllustrative: !costs.length};
+}
+async function evaluate(){
+  clear();
+  app.append(el("div",{class:"panel loading"},
+    el("h2",{text:"正在分析你的生活條件"}),
+    el("div",{class:"dots","aria-hidden":"true"},el("i"),el("i"),el("i")),
+    el("p",{class:"muted",text: sample && !aiBlocked ? "AI 正在比對毛孩需求與你的條件，約需 10–30 秒。第一次使用時，系統會詢問是否允許使用 Claude。" : "正在計算評估結果。"})
+  ));
+  const rule = ruleEval(A);
+  let out = null; usedAI = false;
+  if (sample && !aiBlocked){
+    try {
+      const raw = await sample.json(buildPrompt(A, rule), {modelTier:"quick"});
+      out = normalize(raw, rule);
+      usedAI = !!out;
+    } catch(e){
+      if (e && e.code==="not_granted") aiBlocked = true;
+      out = null;
+    }
+  }
+  result = out || rule;
+  tab = "result"; chat = []; chatDay = null;
+  setMode();
+  renderResult();
+}
+
+/* ---------- Result views ---------- */
+function lvClass(l){ return l==="低風險"?"lv-low":l==="中風險"?"lv-mid":"lv-high"; }
+function colorFor(s){ return s>=75?"var(--low)":s>=55?"var(--mid)":"var(--high)"; }
+const fmt = n => n.toLocaleString("zh-TW");
+function renderResult(){
+  clear();
+  const tabs = el("div",{class:"tabs",role:"tablist"});
+  [["result","評估結果"],["list","準備清單"],["cost","費用估算"],["care","關懷陪伴"]].forEach(([k,t])=>{
+    tabs.append(el("button",{class:"tab",role:"tab","aria-selected":tab===k?"true":"false",onclick:()=>{tab=k;renderResult();}},t));
+  });
+  app.append(tabs);
+  const p = el("div",{class:"panel"});
+  if (tab==="result") viewScore(p);
+  if (tab==="list") viewList(p);
+  if (tab==="cost") viewCost(p);
+  if (tab==="care") viewCare(p);
+  app.append(p);
+  app.append(el("div",{class:"row",style:"margin-top:14px"}, el("button",{class:"btn ghost",onclick:()=>{A={members:[],changes:[]};result=null;step=-1;setMode();renderWelcome();}},"重新評估")));
+  app.append(el("p",{class:"foot",text:"原型展示用。評估結果僅供參考，不取代獸醫或專業人員的建議。"}));
+}
+function viewScore(p){
+  const r = result, C = 2*Math.PI*50, off = C*(1-r.score/100);
+  const ring = el("div",{class:"ring"});
+  ring.innerHTML = `<svg viewBox="0 0 118 118" aria-hidden="true"><circle cx="59" cy="59" r="50" fill="none" stroke="var(--chip)" stroke-width="12"/><circle cx="59" cy="59" r="50" fill="none" stroke="${colorFor(r.score)}" stroke-width="12" stroke-linecap="round" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/></svg>`;
+  ring.append(el("div",{class:"val"}, el("b",{text:String(r.score)}), el("span",{text:"適配分數"})));
+  p.append(el("div",{class:"scorebox"}, ring, el("div",{}, el("span",{class:"level "+lvClass(r.level),text:r.level}), el("p",{style:"margin:0",text:r.summary}))));
+  const dims = el("div",{class:"dims"});
+  r.dimensions.forEach(d=>dims.append(el("div",{class:"dim"},
+    el("div",{class:"top"}, el("span",{text:d.name}), el("span",{text:`${d.score} 分`})),
+    el("div",{class:"meter"}, el("span",{style:`width:${d.score}%;background:${colorFor(d.score)}`})),
+    el("small",{text:d.comment})
+  )));
+  p.append(dims);
+  if (r.risks.length){
+    const s = el("div",{class:"sect"}, el("h2",{text:"需要先注意的地方"}));
+    r.risks.forEach(k=>s.append(el("div",{class:"risk"}, el("h3",{text:k.title}), el("p",{text:k.reason}))));
+    p.append(s);
+  }
+  const ul = el("ol",{class:"sugg"}); r.suggestions.forEach(t=>ul.append(el("li",{text:t})));
+  p.append(el("div",{class:"sect"}, el("h2",{text:"建議你這樣準備"}), ul));
+}
+function viewList(p){
+  p.append(el("h2",{text:"你的準備清單"}), el("p",{class:"muted",text:"依毛孩的種類、年齡與你的居住條件整理。只列品類，選購時可請店員協助比較。"}));
+  result.checklist.forEach(c=>{
+    const ul = el("ul");
+    c.items.forEach(i=>ul.append(el("li",{}, el("label",{}, el("input",{type:"checkbox"}), el("span",{text:i})))));
+    p.append(el("div",{class:"cat"}, el("h3",{text:c.category}), ul));
+  });
+}
+function budgetRange(m){ return m==="2,000 元以下"?[0,24000]:m==="2,000–4,000 元"?[24000,48000]:m==="4,000 元以上"?[48000,null]:[null,null]; }
+function viewCost(p){
+  const r = result;
+  p.append(el("h2",{text:"第一年花費估算"}), el("p",{class:"muted",text: r.costsIllustrative ? "以下為示意區間，正式版將以知識庫資料計算。" : "AI 依毛孩條件粗估的區間，實際花費會因地區與狀況而異。"}));
+  const tb = el("table",{}, el("tr",{}, el("th",{text:"項目"}), el("th",{text:"年度區間（元）"}), el("th",{text:"說明"})));
+  let lo=0, hi=0;
+  r.costs.forEach(c=>{ lo+=c.low; hi+=c.high; tb.append(el("tr",{}, el("td",{text:c.item}), el("td",{class:"n",text:`${fmt(c.low)}–${fmt(c.high)}`}), el("td",{}, el("small",{text:c.note})))); });
+  tb.append(el("tr",{}, el("td",{}, el("b",{text:"合計"})), el("td",{class:"n",text:`${fmt(lo)}–${fmt(hi)}`}), el("td")));
+  p.append(tb);
+  const [bl,bh] = budgetRange(A.monthly);
+  let verdict, color;
+  if (bh!==null && bh < lo){ verdict="預估花費高於你的年度預算，建議先調整預算或選擇照顧需求較低的毛孩。"; color="var(--high)"; }
+  else if (bh!==null && bh < hi){ verdict="預算勉強可以，但遇到突發醫療可能會吃緊，建議先準備緊急預備金。"; color="var(--mid)"; }
+  else { verdict="預算大致足以應付第一年的基本開銷。"; color="var(--low)"; }
+  p.append(el("div",{class:"budget"},
+    el("div",{class:"muted",text:`你的年度預算約：${bl===null?"未填":bh===null?`${fmt(bl)} 元以上`:`${fmt(bl)}–${fmt(bh)} 元`}`}),
+    el("p",{class:"verdict",style:`color:${color}`,text:verdict})
+  ));
+}
+
+/* ---------- Care check-in simulation ---------- */
+function ruleCheck(text){
+  const hi = /(不讓養|不能養|送走|棄養|不要牠|養不起|放棄|吃不消|撐不下去)/;
+  const mid = /(叫|抗議|咬|破壞|亂尿|亂大|生病|不吃|拉肚子|吐|花費|開銷|貴|累)/;
+  if (hi.test(text)) return {level:"高風險", signals:["出現可能放棄飼養的訊號"], reply:"謝謝你願意告訴我們，這真的不容易。先別急著做決定，我們可以一起找找看有沒有其他辦法，例如臨時照顧或協助找新住處。方便的話，回到門市找店員聊聊，我們會盡力幫忙。", referral:"門市專人聯繫，協助臨時照顧或送養資源"};
+  if (mid.test(text)) return {level:"中風險", signals:["出現照顧上的困擾"], reply:"辛苦了！剛開始難免會遇到這些狀況，大多可以透過調整作息與訓練改善。我們整理了一些做法給你，如果持續沒有改善，也可以找訓練師或獸醫諮詢。", referral:"轉介訓練師或獸醫諮詢"};
+  return {level:"低風險", signals:["適應狀況良好"], reply:"太好了！看得出你很用心。接下來可以開始建立固定作息，也別忘了按時程安排預防針喔。", referral:null};
+}
+async function sendReply(text){
+  if (!text || chatBusy || !chatDay) return;
+  chat.push({who:"me",text});
+  chatBusy = true; renderResult();
+  let j = null;
+  if (sample && !aiBlocked){
+    const prompt = `你是寵物用品門市「PawStart 關懷陪伴」LINE 助理。新手飼主在帶毛孩回家第 ${chatDay} 天收到關懷訊息後回覆了。請判讀棄養風險並回覆飼主。用台灣繁體中文，語氣溫暖、具體，不做醫療診斷，涉及健康狀況時建議就醫；不推薦品牌或商品。
+
+飼主評估資料：
+${profileText(A)}
+評估時的主要風險：${result.risks.map(r=>r.title).join("、")||"無"}
+
+我們傳送的關懷訊息：${CHECKINS[chatDay]}
+飼主回覆：${text}
+
+風險分級：低風險＝適應良好或小困擾；中風險＝持續的照顧困擾（行為、健康、開銷、鄰居等）需要專業協助；高風險＝出現可能放棄飼養、送走或棄養的訊號。
+
+只回傳 JSON，不要其他文字：{"level":"低風險|中風險|高風險","signals":["判讀到的風險訊號，各12字內，最多3項"],"reply":"給飼主的回覆，120字內","referral":"建議轉介的資源類型（例：訓練師、獸醫、門市專人協助臨時照顧或送養），低風險時為 null"}`;
+    try {
+      const o = await sample.json(prompt,{modelTier:"quick",cache:false});
+      if (o && typeof o.reply==="string") j = {level:["低風險","中風險","高風險"].includes(o.level)?o.level:"中風險", signals:Array.isArray(o.signals)?o.signals.filter(s=>typeof s==="string").slice(0,3):[], reply:o.reply, referral: typeof o.referral==="string" ? o.referral : null};
+    } catch(e){ if (e && e.code==="not_granted") aiBlocked = true; }
+  }
+  if (!j) j = ruleCheck(text);
+  chat.push({who:"bot",text:j.reply});
+  chat.push({who:"sys",j});
+  chatBusy = false; renderResult();
+}
+function viewCare(p){
+  p.append(el("h2",{text:"關懷陪伴模擬"}), el("p",{class:"muted",text:"模擬飼主帶毛孩回家後收到的 LINE 關懷訊息。選擇天數，再以飼主身分回覆，看看系統如何判讀風險。"}));
+  const days = el("div",{class:"days",role:"group","aria-label":"關懷時點"});
+  [7,30,90].forEach(d=>days.append(el("button",{type:"button",class:"chip","aria-pressed":chatDay===d?"true":"false",onclick:()=>{chatDay=d;chat=[{who:"bot",text:CHECKINS[d]}];renderResult();}},`第 ${d} 天`)));
+  p.append(days);
+  const box = el("div",{class:"chat"});
+  if (!chatDay) box.append(el("p",{class:"muted",style:"margin:auto;text-align:center",text:"先選擇要模擬的天數"}));
+  chat.forEach(m=>{
+    if (m.who==="sys"){
+      const j = m.j;
+      box.append(el("div",{class:"sys"},
+        el("span",{class:"tagline",text:"系統端判讀（飼主看不到）"}),
+        el("div",{}, el("b",{text:"風險等級："}), el("span",{style:`color:${j.level==="低風險"?"var(--low)":j.level==="中風險"?"var(--mid)":"var(--high)"};font-weight:700`,text:j.level})),
+        j.signals.length ? el("div",{}, el("b",{text:"判讀訊號："}), j.signals.join("、")) : null,
+        el("div",{}, el("b",{text:"後續行動："}), j.referral || "持續定期關懷")
+      ));
+    } else box.append(el("div",{class:"msg "+m.who}, m.who==="bot"?el("span",{class:"who",text:"PawStart"}):null, m.text));
+  });
+  if (chatBusy) box.append(el("div",{class:"msg bot"}, el("span",{class:"who",text:"PawStart"}), "判讀中…"));
+  p.append(box);
+  if (chatDay){
+    const q = el("div",{class:"quick"});
+    QUICK.forEach(t=>q.append(el("button",{type:"button",class:"chip",disabled:chatBusy,onclick:()=>sendReply(t)},t)));
+    const inp = el("input",{type:"text",placeholder:"以飼主身分輸入回覆",maxlength:"120","aria-label":"飼主回覆"});
+    const send = el("button",{class:"btn",disabled:chatBusy,onclick:()=>sendReply(inp.value.trim())},"送出");
+    inp.addEventListener("keydown",e=>{ if(e.key==="Enter" && !e.isComposing) sendReply(inp.value.trim()); });
+    p.append(el("div",{class:"muted",style:"margin-top:12px",text:"快速回覆範例："}), q, el("div",{class:"composer"}, inp, send));
+  }
+}
+
+renderWelcome();
+})();
+</script>
+</body>
+</html>
