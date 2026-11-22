@@ -81,8 +81,8 @@ input[type=text],textarea{width:100%;border:1.5px solid var(--line);background:v
 .dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
 @keyframes b{0%,80%,100%{transform:scale(.5);opacity:.4}40%{transform:scale(1);opacity:1}}
 
-.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 52px);z-index:4}
-.tab{border:0;background:transparent;color:var(--muted);border-radius:10px;padding:9px 4px;font-size:14px;font-weight:700}
+.tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 52px);z-index:4}
+.tab{border:0;background:transparent;color:var(--muted);border-radius:10px;padding:9px 2px;font-size:13px;font-weight:700}
 .tab[aria-selected="true"]{background:var(--brand);color:var(--brandInk)}
 
 .scorebox{display:flex;gap:18px;align-items:center}
@@ -138,11 +138,64 @@ td small{color:var(--muted)}
 .composer .btn{width:auto;padding:10px 16px;font-size:15px}
 .foot{margin-top:18px;font-size:12px;color:var(--muted);text-align:center}
 .err{color:var(--high);font-size:14px;margin-top:8px}
+.guide details{background:var(--surface2);border-radius:14px;padding:2px 14px;margin-top:10px}
+.guide summary{cursor:pointer;font-weight:700;font-size:16px;padding:12px 0;list-style:none;display:flex;justify-content:space-between;gap:10px;color:var(--ink)}
+.guide summary::-webkit-details-marker{display:none}
+.guide summary::after{content:"＋";color:var(--muted)}
+.guide details[open] summary::after{content:"－"}
+.guide ul{margin:0 0 12px;padding-left:20px;color:var(--body);font-size:15px}
+.guide li{margin:6px 0}
+.guide a{color:var(--brand);font-weight:700}
+.match{background:var(--surface2);border-radius:12px;padding:12px 14px;margin-top:10px;border-left:5px solid var(--low)}
+.match h3{margin:0 0 4px;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.match p{margin:0;font-size:15px}
+.adopt-tag{font-size:12px;font-weight:700;background:var(--amber);color:var(--amberInk);border-radius:999px;padding:1px 9px}
+.viewbtn{border:1.5px solid var(--brandInk);background:transparent;color:var(--brandInk);border-radius:999px;padding:3px 12px;font-size:13px;font-weight:700}
+body.wide main,body.wide .bar{max-width:1000px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 4px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.kpi b{display:block;font-size:28px;font-weight:900;line-height:1.2}
+.kpi span{font-size:13px;color:var(--muted)}
+@media (max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.case{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--line);border-radius:18px;padding:14px 18px;margin-top:12px}
+.case.c-high{border-left-color:var(--high)}.case.c-mid{border-left-color:var(--mid)}.case.c-low{border-left-color:var(--low)}
+.case .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.case .cid{font-weight:900;font-size:17px}
+.case .level{font-size:12px;margin:0;padding:1px 9px}
+.status{margin-left:auto;font-size:13px;font-weight:700;padding:2px 10px;border-radius:999px;background:var(--chip);color:var(--ink)}
+.status.todo{background:var(--sys);border:1.5px solid var(--sysLine)}
+.tag-now{font-size:12px;font-weight:700;background:var(--amber);color:var(--amberInk);border-radius:999px;padding:1px 8px}
+.meta{font-size:14px;color:var(--muted);margin:6px 0 4px}
+.sig{font-size:14px;color:var(--body);margin:0 0 4px}
+.task{background:var(--surface2);border-radius:12px;padding:10px 12px;font-size:14px;color:var(--body);margin:8px 0}
+.task b{color:var(--ink)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.actions .btn{width:auto;padding:8px 14px;font-size:14px}
+.case details{margin-top:8px}
+.case summary{font-size:13px;color:var(--muted);cursor:pointer}
+.case details ul{margin:6px 0 0;padding-left:18px;font-size:13px;color:var(--body)}
+.script{margin-top:8px;border:1.5px dashed var(--sysLine);background:var(--sys);border-radius:12px;padding:10px 12px;font-size:14px;color:var(--body)}
+.script ul{margin:4px 0;padding-left:18px}
+.script b{color:var(--ink)}
+.sys .btn{width:auto;padding:6px 12px;font-size:13px;margin-top:8px}
+select{width:100%;border:1.5px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:12px;padding:11px 14px;font:inherit}
+.res{background:var(--surface2);border-radius:14px;padding:12px 14px;margin-top:10px;border:2px solid transparent}
+.res.hl{border-color:var(--amber)}
+.res h3{margin:0 0 4px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.res p{margin:2px 0;font-size:14px}
+.res .links{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.res .links a{font-size:14px;font-weight:700;color:var(--brand);border:1.5px solid var(--brand);border-radius:999px;padding:5px 12px;text-decoration:none}
+.hl-tag{font-size:12px;font-weight:700;background:var(--amber);color:var(--amberInk);border-radius:999px;padding:1px 8px}
+.hotline{margin-top:14px;border-radius:14px;padding:12px 14px;background:var(--sys);border:1.5px dashed var(--sysLine);font-size:14px;color:var(--body)}
+.hotline b{color:var(--ink)}
+.src{font-size:12px;color:var(--muted);margin-top:12px}
+
 .notice{background:var(--surface2);border-left:5px solid var(--amber);border-radius:12px;padding:10px 14px;font-size:14px;color:var(--body);margin:0 0 16px}
 </style>
 </head>
 <body>
-<header><div class="bar"><div class="logo">PawStart<small>毛孩好起點</small></div><span class="mode" id="mode">公開示範版</span></div></header>
+<header><div class="bar"><div class="logo">PawStart<small>毛孩好起點</small></div><span class="mode" id="mode">公開示範版</span><button class="viewbtn" id="viewBtn" type="button">門市端</button></div></header>
 <main id="app" aria-live="polite"></main>
 
 <script>
@@ -157,7 +210,8 @@ const STEPS = [
   {title:"居住環境", hint:"住的地方，決定毛孩能不能安穩待下來。", fields:[
     {k:"housing", label:"目前住處", type:"single", opts:["租屋","自有住宅","與家人同住"]},
     {k:"space", label:"空間大小", type:"single", opts:["套房","公寓","有庭院的透天"]},
-    {k:"landlord", label:"房東或家人同意養嗎？", type:"single", opts:["已經同意","還沒確認","不需要詢問"]}
+    {k:"landlord", label:"房東或家人同意養嗎？", type:"single", opts:["已經同意","還沒確認","不需要詢問"]},
+    {k:"county", label:"居住縣市", type:"select"}
   ]},
   {title:"時間與陪伴", hint:"照實回答就好，這不是考試。", fields:[
     {k:"companion", label:"每天能專心陪伴的時間", type:"single", opts:["不到 1 小時","1–3 小時","3 小時以上"]},
@@ -210,7 +264,7 @@ function el(tag, attrs, ...kids){
   for (const c of kids.flat()) if (c != null) n.append(c.nodeType ? c : document.createTextNode(c));
   return n;
 }
-function clear(){ app.replaceChildren(); window.scrollTo(0,0); }
+function clear(){ app.replaceChildren(); document.body.classList.toggle("wide", view==="store"); window.scrollTo(0,0); }
 
 /* ---------- Welcome ---------- */
 function renderWelcome(){
@@ -226,8 +280,198 @@ function renderWelcome(){
     ),
     el("p",{class:"notice",text:"這是公開示範版：評估結果由內建規則計算。正式版由 AI 依品種特性判讀並解讀飼主回覆，請參考 Demo 影片。"}),
     el("button",{class:"btn",onclick:()=>{step=0;renderStep();}},"開始評估"),
+    el("button",{class:"btn ghost",style:"margin-top:10px",onclick:()=>{guideTab="adopt";resCat=null;renderGuidePage();}},"先看飼養須知"),
     el("p",{class:"foot",text:"評估結果是幫你做準備，不是審查。不需要填寫姓名或電話。"})
   ));
+}
+
+/* ---------- Adoption guide ---------- */
+const GUIDE = [
+  {t:"帶回家前，先想清楚", open:true, items:[
+    "毛孩可能陪伴你十年以上，請確認未來的生活規劃都能把牠算進去。",
+    "全家人都同意，並先確認房東、社區或管委會的飼養規定。",
+    "預留每天陪伴的時間，以及日常開銷與突發醫療的預算。",
+    "想好搬家、出國或家中有新成員時，毛孩由誰照顧。"]},
+  {t:"法定的飼主責任", items:[
+    "飼主須為成年人；未成年人飼養時，由法定代理人或監護人擔任飼主。",
+    "提供適當的食物、24 小時充足乾淨的飲水，以及安全、通風、乾淨的生活環境。",
+    "狗和貓都要辦理寵物登記並植入晶片（貓自 2025 年起納入應登記寵物）。",
+    "犬貓應完成絕育；若不絕育，須依規定向主管機關申報。",
+    "依規定施打狂犬病疫苗：滿 3 個月施打第一劑，之後每年追加。",
+    "不得棄養。棄養違反《動物保護法》，會被處以罰鍰。"]},
+  {t:"認養流程", link:true, items:[
+    "各縣市收容所的開放時間與認養條件不同，出發前請先查詢。",
+    "通常需本人攜帶身分證件到場，填寫認養申請並簽署認養切結書。",
+    "先到現場和毛孩互動，確認個性與你的生活節奏合得來，不要只看外表。"]},
+  {t:"帶回家後的第一個月", items:[
+    "盡快帶到動物醫院做健康檢查，並完成寵物登記。",
+    "給牠一到兩週適應新環境，作息固定，先別急著帶去人多的地方。",
+    "準備好食物、飲水、睡窩與如廁空間；完成評估後可取得個人化準備清單。",
+    "遇到吠叫、破壞、亂尿尿等狀況，先找訓練師或獸醫諮詢，大多可以改善。"]},
+  {t:"如果真的無法繼續飼養", items:[
+    "不要把毛孩丟在路邊或收容所門口。",
+    "先聯繫原認養單位或門市，協助尋找臨時照顧或新家。",
+    "依所在縣市的「不擬續養」規定辦理，各縣市流程與規費不同。"]}
+];
+function viewAdopt(p){
+  p.append(el("p",{class:"muted",text:"不論是認養或購買，帶毛孩回家前都值得先讀一遍。"}));
+  GUIDE.forEach(g=>{
+    const ul = el("ul"); g.items.forEach(i=>ul.append(el("li",{text:i})));
+    if (g.link) ul.append(el("li",{}, "全國收容所與可認養動物，可到", el("a",{href:"https://animal.moa.gov.tw/",target:"_blank",rel:"noopener"},"農業部動物保護資訊網"), "查詢。"));
+    p.append(el("details",{open:!!g.open}, el("summary",{text:g.t}), ul));
+  });
+  p.append(el("div",{class:"hotline"}, el("b",{text:"1959 動物保護專線　"}), "發現動物遭棄養或虐待，可撥打通報。"));
+  p.append(el("p",{class:"src",text:"內容整理自《動物保護法》與農業部公開資訊，實際規定以主管機關最新公告為準。"}));
+}
+
+let guideTab = "adopt", careSpecies = null;
+const CARE_SECTIONS = [["food","食｜飲食"],["groom","衣｜清潔與穿著"],["home","住｜居家環境"],["out","行｜外出與活動"],["health","保健｜健康照護"]];
+const CARE = {
+  "狗": {
+    food:["依年齡選擇幼犬、成犬或高齡犬的主食；換飼料時用約一週的時間，新舊混合逐步替換，減少腸胃不適。",
+          "隨時提供充足、乾淨的飲水，每天清洗水碗。",
+          "不可以餵：巧克力、葡萄與葡萄乾、洋蔥與大蒜、含木糖醇的無糖食品、含酒精食物，以及煮過的雞骨等容易碎裂的骨頭。",
+          "零食與人類食物要控制份量，避免過胖。"],
+    groom:["定期梳毛，長毛犬更需要；洗澡頻率依皮膚狀況與活動量調整，不需要太頻繁。",
+           "定期修剪指甲、清潔耳朵，並從小練習刷牙。",
+           "寒流時，短毛、小型或高齡犬可以穿保暖衣物；天氣熱時不要穿衣，避免悶熱。"],
+    home:["準備安靜、通風的睡窩，避開陽光直曬與潮濕的地方。",
+          "收好電線、藥品、清潔劑和小物件，避免啃咬或誤食。",
+          "台灣夏天炎熱，不要把狗單獨留在車內，室內保持通風或開冷氣，預防中暑。",
+          "幼犬可用圍欄規劃活動範圍，並固定如廁位置。"],
+    out:["每天散步與活動，運動量依體型、年齡與品種調整。",
+         "外出一定要繫牽繩、配戴名牌；搭乘大眾運輸時，依各交通工具規定使用提籠或寵物推車。",
+         "夏天避開正午散步，柏油路面可能燙傷腳掌。",
+         "幼犬期多接觸不同的人、聲音與環境，幫助社會化；預防針還沒打完前，外出方式請先問獸醫。"],
+    health:["定期施打疫苗（含法定的狂犬病疫苗），並每年健康檢查；高齡犬建議縮短健檢間隔。",
+            "定期預防體內外寄生蟲，台灣蚊子多，也要預防心絲蟲。",
+            "依規定完成絕育與寵物登記。",
+            "出現持續嘔吐或腹瀉、食慾或精神明顯變差、呼吸急促等狀況，盡快就醫。"]
+  },
+  "貓": {
+    food:["依年齡選擇幼貓、成貓或高齡貓的主食；貓是肉食動物，不能長期用狗飼料代替。",
+          "多喝水對泌尿道健康很重要，可以搭配濕食、多放幾個水碗或使用飲水機。",
+          "不可以餵：洋蔥、大蒜、韭菜等蔥蒜類，巧克力、葡萄與葡萄乾、酒精與含咖啡因的飲料；多數成貓也不適合喝牛奶。",
+          "換飼料時新舊混合，用約一週的時間逐步替換。"],
+    groom:["定期梳毛，換毛季與長毛貓更需要，可以減少毛球。",
+           "一般不需要常洗澡；定期修剪指甲、清潔耳朵，並練習刷牙。"],
+    home:["貓砂盆放在安靜的地方，每天清理；多貓家庭的貓砂盆，建議比貓的數量多一個。",
+          "窗戶與陽台加裝防護網，避免墜樓或走失。",
+          "提供貓抓板、跳台和可以躲藏的空間，滿足抓、爬、躲的天性。",
+          "百合花對貓有劇毒，家中不要擺放；繩線、橡皮筋等小物也要收好，避免誤食。"],
+    out:["建議室內飼養，降低走失、車禍與傳染病的風險。",
+         "就醫或外出一律使用外出籠，不要抱著出門。",
+         "每天用逗貓棒等玩具陪玩，幫助運動與紓壓。",
+         "搬家或環境改變時，先讓貓待在一個房間慢慢適應。"],
+    health:["定期施打疫苗（含法定的狂犬病疫苗），並每年健康檢查；高齡貓建議縮短健檢間隔。",
+            "定期預防體內外寄生蟲。",
+            "依規定完成絕育與寵物登記（貓自 2025 年起納入應登記寵物）。",
+            "貓咪超過一天不吃東西，或頻繁跑砂盆卻尿不出來，可能危及生命，請立即就醫。"]
+  }
+};
+function viewGuide(p){
+  p.replaceChildren(); p.classList.add("guide");
+  p.append(el("h2",{text:"飼養須知"}));
+  const seg = el("div",{class:"days",role:"group","aria-label":"須知類別"});
+  [["adopt","認養須知"],["care","基本養護"],["res","轉介資源"]].forEach(([k,t])=>seg.append(el("button",{type:"button",class:"chip","aria-pressed":guideTab===k?"true":"false",onclick:()=>{guideTab=k;viewGuide(p);}},t)));
+  p.append(seg);
+  if (guideTab==="adopt") viewAdopt(p); else if (guideTab==="care") viewKeeping(p); else viewResources(p);
+}
+function viewKeeping(p){
+  const sp = careSpecies || (A.species==="貓" ? "貓" : "狗");
+  p.append(el("p",{class:"muted",text:"從食、衣、住、行、保健五個面向，整理帶回家後的日常照顧重點。"}));
+  const tog = el("div",{class:"chips",role:"group","aria-label":"選擇毛孩種類",style:"margin-bottom:4px"});
+  ["狗","貓"].forEach(s=>tog.append(el("button",{type:"button",class:"chip","aria-pressed":sp===s?"true":"false",onclick:()=>{careSpecies=s;viewGuide(p);}},s==="狗"?"狗狗":"貓咪")));
+  p.append(tog);
+  CARE_SECTIONS.forEach(([k,t],i)=>{
+    const ul = el("ul"); CARE[sp][k].forEach(x=>ul.append(el("li",{text:x})));
+    p.append(el("details",{open:i===0}, el("summary",{text:t}), ul));
+  });
+  p.append(el("p",{class:"src",text:"以上為一般照護原則，不取代獸醫師的診斷與建議；個別狀況請諮詢動物醫院。"}));
+}
+function renderGuidePage(){
+  clear();
+  const p = el("div",{class:"panel"}); viewGuide(p); app.append(p);
+  app.append(el("div",{class:"row",style:"margin-top:14px"},
+    el("button",{class:"btn ghost",onclick:()=>renderWelcome()},"回到首頁"),
+    el("button",{class:"btn",onclick:()=>{step=0;renderStep();}},"開始評估")));
+}
+
+/* ---------- Referral resources (official county data + live map search) ---------- */
+const COUNTIES = [
+  ["臺北市","臺北市動物保護處","臺北市信義區吳興街600巷109號","02-87897158（或 1999 市民當家熱線）","0287897158","https://www.tcapo.gov.taipei/Default.aspx"],
+  ["新北市","新北市政府動物保護防疫處","新北市板橋區四川路1段157巷2號","02-29596353","0229596353","https://www.ahiqo.ntpc.gov.tw/cht/index.php?"],
+  ["基隆市","基隆市動物保護防疫所","基隆市信義區信二路241號1樓","02-24280677","0224280677","https://www.klaphio.klcg.gov.tw/"],
+  ["桃園市","桃園市政府動物保護處","桃園市桃園區縣府路57號","03-3326742 分機 400-417","033326742","http://www.tycg.gov.tw/animal/index.jsp"],
+  ["新竹市","新竹市動物保護及防疫所","新竹市海濱路250號","03-5368329","035368329","https://puppy.hccg.gov.tw/ch/index.jsp"],
+  ["新竹縣","新竹縣動物保護防疫所","新竹縣竹北市縣政5街192號","03-5519548 分機 407","035519548","https://apc.hsinchu.gov.tw/"],
+  ["苗栗縣","苗栗縣動物保護防疫所","苗栗縣苗栗市玉華里玉清路382-1","037-320049","037320049","https://animal.miaoli.gov.tw/"],
+  ["臺中市","臺中市動物保護防疫處","臺中市南屯區萬和路1段28-18號","04-23869420","0423869420","http://www.animal.taichung.gov.tw"],
+  ["彰化縣","彰化縣動物防疫所","彰化縣彰化市中央路2號","04-7620774","047620774","http://www.chcgadcc.gov.tw"],
+  ["南投縣","南投縣家畜疾病防治所","南投縣南投市民族路499號","049-2222542","0492222542","http://adcc.nantou.gov.tw/"],
+  ["雲林縣","雲林縣動植物防疫所","雲林縣斗六市雲林路2段517號","05-5523250","055523250","https://livestock.yunlin.gov.tw/"],
+  ["嘉義市","嘉義市政府建設處","嘉義市中山路199號","05-2290357","052290357","http://www.chiayi.gov.tw/web/build/"],
+  ["嘉義縣","嘉義縣家畜疾病防治所","嘉義縣太保市太保1路1號","05-3620025 分機 27","053620025","http://www.ldcc.gov.tw/"],
+  ["臺南市","臺南市動物防疫保護處","臺南市新營區長榮路1段501號","06-2130958","062130958","https://ahipo.tainan.gov.tw/"],
+  ["高雄市","高雄市動物保護處","高雄市鳳山區忠義街166號","07-7462368","077462368","https://livestock.kcg.gov.tw/"],
+  ["屏東縣","屏東縣政府","屏東市自由路527號","08-7320415","087320415","https://www.pthg.gov.tw/plancib/Default.aspx"],
+  ["宜蘭縣","宜蘭縣動植物防疫所","宜蘭縣五結鄉成興村利寶路60號","03-9602350","039602350","https://animal.e-land.gov.tw/Default.aspx"],
+  ["花蓮縣","花蓮縣動植物防疫所","花蓮縣花蓮市瑞美路5號","038-227431","038227431","http://acdc.hl.gov.tw/"],
+  ["臺東縣","臺東縣動物防疫所","臺東縣臺東市中興路2段733號","089-233720","089233720","https://sites.google.com/jbps.ttct.edu.tw/ttadcc-t1"],
+  ["澎湖縣","澎湖縣家畜疾病防治所","澎湖縣馬公市西文里118之1號","06-9212839","069212839","http://www.phldcc.gov.tw/ch/index.jsp"],
+  ["金門縣","金門縣動植物防疫所","金門縣金湖鎮裕民農莊20號","082-336625","082336625","https://aphin.kinmen.gov.tw/"],
+  ["連江縣","連江縣政府產業發展處","連江縣南竿鄉介壽村76號","0836-25131","083625131","http://www.matsu.gov.tw/Chhtml/Index/371030000A0004"]
+];
+const PILOT = ["彰化縣","雲林縣"];
+let resCounty = null, resCat = null;
+function refCat(text){
+  const t = text || "";
+  if (/獸醫|醫院|就醫/.test(t)) return "vet";
+  if (/訓練|行為/.test(t)) return "train";
+  if (/送養|臨時照顧|收容|安置/.test(t)) return "shelter";
+  return null;
+}
+const mapLink = (q) => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
+function extLink(href, text){ return el("a",{href, target:"_blank", rel:"noopener"}, text); }
+function resourceCards(county, cat){
+  const wrap = el("div");
+  const row = COUNTIES.find(c=>c[0]===county);
+  if (!row){ wrap.append(el("p",{class:"muted",text:"請先選擇縣市。"})); return wrap; }
+  const [, agency, addr, tel, dial, url] = row;
+  const card = (key, title, kids) => el("div",{class:"res"+(cat===key?" hl":"")}, el("h3",{}, el("span",{text:title}), cat===key ? el("span",{class:"hl-tag",text:"建議優先聯繫"}) : null), ...kids);
+  wrap.append(card("vet","動物醫院", [
+    el("p",{text:`搜尋${county}的動物醫院；緊急狀況請找夜間或 24 小時急診。`}),
+    el("div",{class:"links"}, extLink(mapLink(county+" 動物醫院"),"附近動物醫院"), extLink(mapLink(county+" 24小時 急診 動物醫院"),"夜間／24 小時急診"))
+  ]));
+  wrap.append(card("train","行為與訓練", [
+    el("p",{text:"吠叫、破壞、亂尿尿等問題，可找寵物行為訓練師諮詢。"}),
+    el("div",{class:"links"}, extLink(mapLink(county+" 寵物行為訓練"),"搜尋寵物訓練師"))
+  ]));
+  wrap.append(card("shelter",`${county}動物保護主管機關`, [
+    el("p",{}, el("b",{text:agency})),
+    el("p",{text:addr}),
+    el("p",{text:"電話："+tel}),
+    el("p",{class:"muted",style:"font-size:13px",text:"負責收容所、認養、不擬續養與動物保護申訴。"}),
+    el("div",{class:"links"}, extLink("tel:"+dial,"撥打電話"), extLink(url,"機關網站"), extLink("https://animal.moa.gov.tw/","全國認養資訊"))
+  ]));
+  if (PILOT.includes(county)) wrap.append(el("div",{class:"res"}, el("h3",{text:"門市合作單位"}), el("p",{class:"muted",text:"試點期間建立中：將列出經同意的在地合作動物醫院與訓練師。"})));
+  wrap.append(el("div",{class:"hotline"}, el("b",{text:"1959 動物保護專線　"}), "發現動物遭棄養或虐待，可撥打通報。"));
+  wrap.append(el("p",{class:"src",text:"機關資料來源：農業部「各縣市動物保護申訴電話」；地圖搜尋即時連到 Google 地圖。撥打前請以各機關官網公告為準。"}));
+  return wrap;
+}
+function viewResources(p){
+  const county = resCounty || A.county || "";
+  p.append(el("p",{class:"muted",text:"選擇縣市，查看在地動物醫院、訓練師與動物保護機關。"}));
+  const sel = el("select",{"aria-label":"選擇縣市"});
+  sel.append(el("option",{value:""},"請選擇縣市"));
+  COUNTIES.forEach(c=>{ const o = el("option",{value:c[0]},c[0]); if (c[0]===county) o.selected = true; sel.append(o); });
+  sel.addEventListener("change",()=>{ resCounty = sel.value; viewGuide(p); });
+  p.append(sel, resourceCards(county, resCat));
+}
+function openResources(cat){
+  resCat = cat; guideTab = "res";
+  if (view==="store"){ view = "owner"; viewBtn.textContent = "門市端"; }
+  if (result){ tab = "guide"; renderResult(); } else renderGuidePage();
 }
 
 /* ---------- Questionnaire ---------- */
@@ -247,7 +491,14 @@ function renderStep(){
   const refresh = () => { next.disabled = !stepDone(step); };
   for (const f of S.fields){
     const wrap = el("div",{class:"field"});
-    if (f.type === "text"){
+    if (f.type === "select"){
+      const id = "f_"+f.k;
+      const sel = el("select",{id});
+      sel.append(el("option",{value:""},"請選擇縣市"));
+      COUNTIES.forEach(c=>{ const o = el("option",{value:c[0]},c[0]); if (A[f.k]===c[0]) o.selected = true; sel.append(o); });
+      sel.addEventListener("change",()=>{ A[f.k]=sel.value; refresh(); });
+      wrap.append(el("label",{for:id,text:f.label}), sel);
+    } else if (f.type === "text"){
       const id = "f_"+f.k;
       const inp = el("input",{type:"text",id,placeholder:f.ph||"",maxlength:"30",value:A[f.k]||""});
       inp.addEventListener("input",()=>{A[f.k]=inp.value.trim();});
@@ -360,14 +611,32 @@ function ruleEval(a){
     {item:"美容與訓練",low:0,high:5000,note:"長毛貓較高"}
   ];
   return {score, level:levelOf(score), summary: score>=75 ? "整體條件準備得不錯，留意幾個細節就能好好開始。" : score>=55 ? "大致可行，但有幾件事建議帶回家前先處理。" : "目前有幾項關鍵條件還沒到位，建議先調整再決定。",
-    dimensions: DIMS.map((n,i)=>({name:n,score:scores[i],comment:comments[i]})), risks, suggestions, checklist, costs, costsIllustrative:true};
+    dimensions: DIMS.map((n,i)=>({name:n,score:scores[i],comment:comments[i]})), risks, suggestions, checklist, costs, costsIllustrative:true, matches: ruleMatches(a)};
+}
+
+function ruleMatches(a){
+  const dog = a.species==="狗";
+  const lowTime = a.companion==="不到 1 小時" || a.away==="10 小時以上";
+  const small = a.space==="套房";
+  const lowBudget = a.monthly==="2,000 元以下" || a.emergency==="還沒有";
+  const first = a.experience==="第一次養";
+  const kids = (a.members||[]).includes("幼兒");
+  const young = (a.age||"").startsWith("幼年");
+  const out = [];
+  if (lowTime || (dog && small)) out.push({type:"較能獨處的成貓", reason:"成貓個性已定型，較能適應上班族的作息，空間需求也比狗狗小。", adopt:true});
+  if (dog && !lowTime) out.push({type: small ? "活動量低的中小型成犬" : "作息與你相符的成犬", reason:"成犬不像幼犬需要密集的訓練與陪伴，個性也比較好預期。", adopt:true});
+  if (first || kids) out.push({type:"個性穩定、親人的成年毛孩", reason: kids ? "收容所人員已觀察過牠的個性，比較能預期和小孩相處的狀況。" : "個性與習慣已經穩定，新手比較容易上手。", adopt:true});
+  if (lowBudget) out.push({type:"已完成絕育與預防針的成年毛孩", reason:"幼年期的疫苗、結紮等一次性支出較多，選擇已完成基本醫療的毛孩，可降低第一年花費。", adopt:true});
+  if (young && first && out.length<3) out.push({type:"一歲以上的毛孩", reason:"幼犬幼貓需要大量時間教導如廁與社會化，第一次養從成年毛孩開始會輕鬆許多。", adopt:true});
+  if (!out.length) out.push({type: dog ? "你想養的狗狗類型" : "你想養的貓咪類型", reason:"你的條件和想養的毛孩大致相符，也可以考慮到收容所認識需要家的成年毛孩。", adopt:true});
+  return out.slice(0,3);
 }
 
 /* ---------- AI evaluation ---------- */
 function profileText(a){
   return [
     `想養：${a.species||"未填"}${a.breed?`（${a.breed}）`:""}，${a.age||"未填"}`,
-    `住處：${a.housing||"未填"}，${a.space||"未填"}，房東或家人同意：${a.landlord||"未填"}`,
+    `住處：${a.county||""}${a.housing||"未填"}，${a.space||"未填"}，房東或家人同意：${a.landlord||"未填"}`,
     `每天陪伴：${a.companion||"未填"}；平日家中無人：${a.away||"未填"}`,
     `每月預算：${a.monthly||"未填"}；緊急醫療預備金：${a.emergency||"未填"}`,
     `同住成員：${(a.members||[]).join("、")||"未填"}；家人是否同意：${a.consent||"未填"}；過敏：${a.allergy||"未填"}`,
@@ -386,9 +655,9 @@ ${rule.dimensions.map(d=>`${d.name}：${d.score}`).join("\n")}
 請以參考分數為基礎，考慮品種或類型的特性（例如運動量、體型、是否需要大量陪伴）做合理調整，每個面向調整幅度不超過 15 分。
 
 只回傳 JSON，不要任何其他文字或 Markdown，格式如下：
-{"score":整數0-100,"summary":"一句話總結，40字內","dimensions":[{"name":"時間陪伴","score":整數,"comment":"20字內"},{"name":"居住環境","score":整數,"comment":"20字內"},{"name":"經濟準備","score":整數,"comment":"20字內"},{"name":"家庭共識","score":整數,"comment":"20字內"},{"name":"經驗與變動","score":整數,"comment":"20字內"}],"risks":[{"title":"10字內","reason":"60字內，具體說明飼主條件與毛孩需求的落差"}],"suggestions":["具體可行的建議，45字內"],"checklist":[{"category":"飲食|居家|外出|清潔|醫療與登記|陪伴與訓練","items":["品類名稱"]}],"costs":[{"item":"飲食|醫療與預防|用品|美容與訓練","low":整數新台幣,"high":整數新台幣,"note":"15字內"}]}
+{"score":整數0-100,"summary":"一句話總結，40字內","dimensions":[{"name":"時間陪伴","score":整數,"comment":"20字內"},{"name":"居住環境","score":整數,"comment":"20字內"},{"name":"經濟準備","score":整數,"comment":"20字內"},{"name":"家庭共識","score":整數,"comment":"20字內"},{"name":"經驗與變動","score":整數,"comment":"20字內"}],"risks":[{"title":"10字內","reason":"60字內，具體說明飼主條件與毛孩需求的落差"}],"suggestions":["具體可行的建議，45字內"],"checklist":[{"category":"飲食|居家|外出|清潔|醫療與登記|陪伴與訓練","items":["品類名稱"]}],"costs":[{"item":"飲食|醫療與預防|用品|美容與訓練","low":整數新台幣,"high":整數新台幣,"note":"15字內"}],"matches":[{"type":"適合的毛孩類型，15字內，例：較能獨處的成貓","reason":"為什麼適合這位飼主的條件，45字內","adopt":true或false}]}
 
-規則：risks 最多 3 項、依嚴重度排序，分數都在 75 以上時可以只給 1 項或空陣列；suggestions 3–4 項；checklist 4–6 類、每類 2–4 項，依種類、年齡與居住條件個人化；costs 為第一年粗估區間。score 為五個面向的平均。`;
+規則：risks 最多 3 項、依嚴重度排序，分數都在 75 以上時可以只給 1 項或空陣列；suggestions 3–4 項；checklist 4–6 類、每類 2–4 項，依種類、年齡與居住條件個人化；costs 為第一年粗估區間。matches 給 2–3 項：依飼主的時間、空間、預算、家庭與經驗，建議比較合拍的毛孩類型，以體型、年齡、活動量、獨處能力等特性描述，不寫特定品種，也不提購買管道；若成年或已完成絕育與預防針的毛孩更適合，請把 adopt 設為 true，鼓勵考慮到收容所認養。即使飼主條件很好，也給出最合拍的類型。score 為五個面向的平均。`;
 }
 function normalize(o, rule){
   if (!o || typeof o!=="object") return null;
@@ -402,7 +671,8 @@ function normalize(o, rule){
   const sugg = strs(o.suggestions).slice(0,4);
   const checklist = Array.isArray(o.checklist) ? o.checklist.filter(c=>c&&typeof c.category==="string").map(c=>({category:c.category,items:strs(c.items).slice(0,5)})).filter(c=>c.items.length) : [];
   const costs = Array.isArray(o.costs) ? o.costs.filter(c=>c&&typeof c.item==="string"&&Number.isFinite(+c.low)&&Number.isFinite(+c.high)).map(c=>({item:c.item,low:Math.max(0,Math.round(+c.low)),high:Math.max(0,Math.round(+c.high)),note:String(c.note||"")})) : [];
-  return {score, level:levelOf(score), summary: typeof o.summary==="string" ? o.summary : rule.summary, dimensions:dims, risks,
+  const matches = Array.isArray(o.matches) ? o.matches.filter(m=>m&&typeof m.type==="string"&&m.type.trim()).slice(0,3).map(m=>({type:m.type,reason:String(m.reason||""),adopt:m.adopt===true})) : [];
+  return {score, level:levelOf(score), summary: typeof o.summary==="string" ? o.summary : rule.summary, dimensions:dims, risks, matches: matches.length ? matches : rule.matches,
     suggestions: sugg.length ? sugg : rule.suggestions, checklist: checklist.length ? checklist : rule.checklist, costs: costs.length ? costs : rule.costs, costsIllustrative: !costs.length};
 }
 async function evaluate(){
@@ -425,6 +695,7 @@ async function evaluate(){
     }
   }
   result = out || rule;
+  makeCurrentCase();
   tab = "result"; chat = []; chatDay = null;
   setMode();
   renderResult();
@@ -437,7 +708,7 @@ const fmt = n => n.toLocaleString("zh-TW");
 function renderResult(){
   clear();
   const tabs = el("div",{class:"tabs",role:"tablist"});
-  [["result","評估結果"],["list","準備清單"],["cost","費用估算"],["care","關懷陪伴"]].forEach(([k,t])=>{
+  [["result","評估結果"],["list","準備清單"],["cost","費用估算"],["care","關懷陪伴"],["guide","飼養須知"]].forEach(([k,t])=>{
     tabs.append(el("button",{class:"tab",role:"tab","aria-selected":tab===k?"true":"false",onclick:()=>{tab=k;renderResult();}},t));
   });
   app.append(tabs);
@@ -446,8 +717,9 @@ function renderResult(){
   if (tab==="list") viewList(p);
   if (tab==="cost") viewCost(p);
   if (tab==="care") viewCare(p);
+  if (tab==="guide") viewGuide(p);
   app.append(p);
-  app.append(el("div",{class:"row",style:"margin-top:14px"}, el("button",{class:"btn ghost",onclick:()=>{A={members:[],changes:[]};result=null;step=-1;setMode();renderWelcome();}},"重新評估")));
+  app.append(el("div",{class:"row",style:"margin-top:14px"}, el("button",{class:"btn ghost",onclick:()=>{A={members:[],changes:[]};result=null;step=-1;cases=cases.filter(c=>!c.current);currentCase=null;setMode();renderWelcome();}},"重新評估")));
   app.append(el("p",{class:"foot",text:"原型展示用。評估結果僅供參考，不取代獸醫或專業人員的建議。"}));
 }
 function viewScore(p){
@@ -470,6 +742,12 @@ function viewScore(p){
   }
   const ul = el("ol",{class:"sugg"}); r.suggestions.forEach(t=>ul.append(el("li",{text:t})));
   p.append(el("div",{class:"sect"}, el("h2",{text:"建議你這樣準備"}), ul));
+  if (r.matches && r.matches.length){
+    const m = el("div",{class:"sect"}, el("h2",{text:"以你的條件，比較合拍的毛孩"}), el("p",{class:"muted",text: r.level==="低風險" ? "你的條件已經準備得不錯，這些類型會讓你們更合拍。" : "與其勉強配合，不如找一個跟你生活節奏相符的夥伴。"}));
+    r.matches.forEach(x=>m.append(el("div",{class:"match"}, el("h3",{}, el("span",{text:x.type}), x.adopt ? el("span",{class:"adopt-tag",text:"可考慮認養"}) : null), el("p",{text:x.reason}))));
+    if (r.matches.some(x=>x.adopt)) m.append(el("button",{class:"btn ghost",style:"margin-top:14px",onclick:()=>{tab="guide";guideTab="adopt";renderResult();}},"看認養須知"));
+    p.append(m);
+  }
 }
 function viewList(p){
   p.append(el("h2",{text:"你的準備清單"}), el("p",{class:"muted",text:"依毛孩的種類、年齡與你的居住條件整理。只列品類，選購時可請店員協助比較。"}));
@@ -504,7 +782,7 @@ function ruleCheck(text){
   const hi = /(不讓養|不能養|送走|棄養|不要牠|養不起|放棄|吃不消|撐不下去)/;
   const mid = /(叫|抗議|咬|破壞|亂尿|亂大|生病|不吃|拉肚子|吐|花費|開銷|貴|累)/;
   if (hi.test(text)) return {level:"高風險", signals:["出現可能放棄飼養的訊號"], reply:"謝謝你願意告訴我們，這真的不容易。先別急著做決定，我們可以一起找找看有沒有其他辦法，例如臨時照顧或協助找新住處。方便的話，回到門市找店員聊聊，我們會盡力幫忙。", referral:"門市專人聯繫，協助臨時照顧或送養資源"};
-  if (mid.test(text)) return {level:"中風險", signals:["出現照顧上的困擾"], reply:"辛苦了！剛開始難免會遇到這些狀況，大多可以透過調整作息與訓練改善。我們整理了一些做法給你，如果持續沒有改善，也可以找訓練師或獸醫諮詢。", referral:"轉介訓練師或獸醫諮詢"};
+  if (mid.test(text)) return {level:"中風險", signals:["出現照顧上的困擾"], reply:"辛苦了！剛開始難免會遇到這些狀況，大多可以透過調整作息與訓練改善。我們整理了一些做法給你，如果持續沒有改善，也可以找訓練師或獸醫諮詢。", referral: /(生病|不吃|拉肚子|吐)/.test(text) ? "轉介獸醫檢查" : "轉介訓練師諮詢"};
   return {level:"低風險", signals:["適應狀況良好"], reply:"太好了！看得出你很用心。接下來可以開始建立固定作息，也別忘了按時程安排預防針喔。", referral:null};
 }
 async function sendReply(text){
@@ -524,15 +802,17 @@ ${profileText(A)}
 
 風險分級：低風險＝適應良好或小困擾；中風險＝持續的照顧困擾（行為、健康、開銷、鄰居等）需要專業協助；高風險＝出現可能放棄飼養、送走或棄養的訊號。
 
-只回傳 JSON，不要其他文字：{"level":"低風險|中風險|高風險","signals":["判讀到的風險訊號，各12字內，最多3項"],"reply":"給飼主的回覆，120字內","referral":"建議轉介的資源類型（例：訓練師、獸醫、門市專人協助臨時照顧或送養），低風險時為 null"}`;
+只回傳 JSON，不要其他文字：{"level":"低風險|中風險|高風險","signals":["判讀到的風險訊號，各12字內，最多3項"],"reply":"給飼主的回覆，120字內","referral":"建議轉介的資源類型（例：訓練師、獸醫、門市專人協助臨時照顧或送養），低風險時為 null","category":"vet|train|shelter|none，對應動物醫院、行為訓練、收容送養與動保機關"}`;
     try {
       const o = await sample.json(prompt,{modelTier:"quick",cache:false});
-      if (o && typeof o.reply==="string") j = {level:["低風險","中風險","高風險"].includes(o.level)?o.level:"中風險", signals:Array.isArray(o.signals)?o.signals.filter(s=>typeof s==="string").slice(0,3):[], reply:o.reply, referral: typeof o.referral==="string" ? o.referral : null};
+      if (o && typeof o.reply==="string") j = {level:["低風險","中風險","高風險"].includes(o.level)?o.level:"中風險", signals:Array.isArray(o.signals)?o.signals.filter(s=>typeof s==="string").slice(0,3):[], reply:o.reply, referral: typeof o.referral==="string" ? o.referral : null, category: ["vet","train","shelter"].includes(o.category) ? o.category : null};
     } catch(e){ if (e && e.code==="not_granted") aiBlocked = true; }
   }
   if (!j) j = ruleCheck(text);
+  if (!j.category) j.category = refCat(j.referral);
   chat.push({who:"bot",text:j.reply});
   chat.push({who:"sys",j});
+  updateCase(text, j);
   chatBusy = false; renderResult();
 }
 function viewCare(p){
@@ -546,10 +826,12 @@ function viewCare(p){
     if (m.who==="sys"){
       const j = m.j;
       box.append(el("div",{class:"sys"},
-        el("span",{class:"tagline",text:"系統端判讀（飼主看不到）"}),
+        el("span",{class:"tagline",text:"系統端判讀（正式版只顯示在門市後台）"}),
         el("div",{}, el("b",{text:"風險等級："}), el("span",{style:`color:${j.level==="低風險"?"var(--low)":j.level==="中風險"?"var(--mid)":"var(--high)"};font-weight:700`,text:j.level})),
         j.signals.length ? el("div",{}, el("b",{text:"判讀訊號："}), j.signals.join("、")) : null,
-        el("div",{}, el("b",{text:"後續行動："}), j.referral || "持續定期關懷")
+        el("div",{}, el("b",{text:"後續行動："}), j.referral || "持續定期關懷"),
+        j.category ? el("button",{class:"btn ghost",style:"margin-right:6px",onclick:()=>openResources(j.category)},"查看轉介資源") : null,
+        el("button",{class:"btn ghost",onclick:()=>{view="store";showView();}},"在門市後台查看")
       ));
     } else box.append(el("div",{class:"msg "+m.who}, m.who==="bot"?el("span",{class:"who",text:"PawStart"}):null, m.text));
   });
@@ -563,6 +845,138 @@ function viewCare(p){
     inp.addEventListener("keydown",e=>{ if(e.key==="Enter" && !e.isComposing) sendReply(inp.value.trim()); });
     p.append(el("div",{class:"muted",style:"margin-top:12px",text:"快速回覆範例："}), q, el("div",{class:"composer"}, inp, send));
   }
+}
+
+/* ---------- Store dashboard ---------- */
+let view = "owner", currentCase = null, storeFilter = "all";
+const scriptCache = {};
+
+const SEED = [
+  {id:"0412", county:"彰化縣", pet:"狗・柴犬・成年", store:"A 店", score:62, day:30, level:"中風險", signals:["白天持續吠叫","鄰居抱怨"], referral:"轉介訓練師諮詢", status:"待聯繫", log:["評估完成：62 分（中風險）","第 7 天：適應良好","第 30 天：回報白天一直叫，鄰居來抗議"]},
+  {id:"0377", county:"雲林縣", pet:"狗・米克斯・成年", store:"B 店", score:49, day:90, level:"高風險", signals:["開銷吃緊","提到考慮送走"], referral:"門市專人聯繫，協助臨時照顧或送養資源", status:"已聯繫", log:["評估完成：49 分（高風險）","第 30 天：花費比預期多","第 90 天：回覆考慮把狗送走","店員已電話聯繫，約定週末到店討論"]},
+  {id:"0365", county:"彰化縣", pet:"貓・米克斯・成年", store:"A 店", score:71, day:30, level:"中風險", signals:["亂尿尿"], referral:"轉介獸醫檢查", status:"已轉介", log:["評估完成：71 分（中風險）","第 30 天：回報貓咪在床上尿尿","已轉介合作動物醫院檢查"]},
+  {id:"0398", county:"雲林縣", pet:"貓・米克斯・幼年", store:"C 店", score:78, day:7, level:"低風險", signals:["適應良好"], referral:null, status:"定期關懷", log:["評估完成：78 分（低風險）","第 7 天：吃睡正常，已會用貓砂"]},
+  {id:"0351", county:"彰化縣", pet:"狗・貴賓・幼年", store:"B 店", score:85, day:90, level:"低風險", signals:["適應良好"], referral:null, status:"已結案", log:["評估完成：85 分（低風險）","第 90 天：一切順利，完成三個月關懷"]}
+];
+let cases = SEED.map(c=>({...c, signals:[...c.signals], log:[...c.log]}));
+const FLOW_RISK = ["待聯繫","已聯繫","已轉介","已結案"], FLOW_LOW = ["定期關懷","已結案"];
+const viewBtn = document.getElementById("viewBtn");
+viewBtn.addEventListener("click", ()=>{ view = view==="owner" ? "store" : "owner"; showView(); });
+function showView(){
+  viewBtn.textContent = view==="owner" ? "門市端" : "飼主端";
+  if (view==="store") renderStore();
+  else if (result) renderResult();
+  else if (step>=0) renderStep();
+  else renderWelcome();
+}
+function petLabel(){ return `${A.species||"未填"}・${A.breed||"品種未定"}・${(A.age||"未填").replace(/（.*）/,"")}`; }
+function makeCurrentCase(){
+  cases = cases.filter(c=>!c.current);
+  currentCase = {id:"0420", current:true, county:A.county||"彰化縣", pet:petLabel(), store:"A 店", score:result.score, day:0, level:result.level,
+    signals: result.risks.length ? result.risks.map(r=>r.title).slice(0,3) : ["條件準備充足"], referral:null,
+    status: result.level==="高風險" ? "待聯繫" : "定期關懷", log:[`評估完成：${result.score} 分（${result.level}）`]};
+  cases.unshift(currentCase);
+}
+function updateCase(text, j){
+  if (!currentCase) return;
+  Object.assign(currentCase, {day:chatDay, level:j.level, signals:j.signals.length?j.signals:["無明顯風險訊號"], referral:j.referral,
+    status: j.level==="低風險" ? "定期關懷" : "待聯繫"});
+  currentCase.log.push(`第 ${chatDay} 天：飼主回覆「${text}」，判讀為${j.level}`);
+  delete scriptCache[currentCase.id];
+}
+function taskFor(c){
+  if (c.status==="已結案") return "已完成追蹤，無待處理事項";
+  if (c.day===0){
+    if (c.level==="高風險") return "評估為高風險：請店員當場說明風險，介紹更合拍的類型與認養資訊";
+    if (c.level==="中風險") return "評估為中風險：提醒飼主先完成建議的準備事項，第 7 天自動關懷";
+    return "依時程於第 7 天進行關懷";
+  }
+  if (c.level==="高風險") return c.status==="待聯繫" ? "48 小時內由專人電話聯繫，了解狀況並提供臨時照顧或送養資源" : "持續追蹤處理進度，確認毛孩已有妥善安置";
+  if (c.level==="中風險") return c.status==="待聯繫" ? "3 天內傳送對應的照護建議，必要時轉介訓練師或獸醫" : "追蹤轉介後的改善狀況";
+  return "持續依時程關懷";
+}
+function nextStatus(c){
+  const flow = c.level==="低風險" ? FLOW_LOW : FLOW_RISK;
+  const i = flow.indexOf(c.status);
+  return i>=0 && i<flow.length-1 ? flow[i+1] : null;
+}
+const statusRank = s => ({"待聯繫":0,"已聯繫":1,"已轉介":2,"定期關懷":3,"已結案":4})[s] ?? 5;
+const levelRank = l => ({"高風險":0,"中風險":1,"低風險":2})[l] ?? 3;
+function fallbackScript(c){
+  if (c.level==="高風險") return {opening:"您好，我是門市的店員，想關心一下毛孩最近的狀況。", points:["先聽飼主說明遇到的困難，不急著給建議","了解是否有搬家、經濟或家庭變動等時間壓力","提供臨時照顧、協助找新家等選項，避免直接棄養","約定下次聯繫或到店時間"], avoid:"避免指責或說「當初就不該養」"};
+  return {opening:"您好，看到您回覆的狀況，想提供一些建議。", points:["確認狀況開始的時間與發生頻率","分享對應的照護或訓練方法","若持續沒有改善，建議轉介訓練師或獸醫","約定一週後再關心一次"], avoid:"避免直接判斷病因，健康問題一律建議就醫"};
+}
+async function makeScript(c, box, btn){
+  btn.disabled = true; box.replaceChildren(el("span",{text:"產生中…"})); box.hidden = false;
+  let s = null;
+  if (sample && !aiBlocked){
+    const prompt = `你是寵物用品門市的資深店長，要指導店員聯繫一位新手飼主，目標是在對方放棄飼養之前提供協助。用台灣繁體中文，語氣溫暖、不說教，不做醫療診斷，不推薦品牌或商品。
+個案：毛孩 ${c.pet}；目前風險 ${c.level}；判讀訊號 ${c.signals.join("、")}；建議轉介 ${c.referral||"無"}；紀錄：${c.log.join("／")}
+只回傳 JSON：{"opening":"電話開場白，40字內","points":["這通聯繫要了解或提供的重點，各30字內，3–4項"],"avoid":"要避免的說法，30字內"}`;
+    try { const o = await sample.json(prompt,{modelTier:"quick"}); if (o && typeof o.opening==="string" && Array.isArray(o.points)) s = {opening:o.opening, points:o.points.filter(x=>typeof x==="string").slice(0,4), avoid:String(o.avoid||"")}; }
+    catch(e){ if (e && e.code==="not_granted") aiBlocked = true; }
+  }
+  if (!s) s = fallbackScript(c);
+  scriptCache[c.id] = s;
+  fillScript(box, s); btn.disabled = false;
+}
+function fillScript(box, s){
+  const ul = el("ul"); s.points.forEach(t=>ul.append(el("li",{text:t})));
+  box.replaceChildren(el("div",{}, el("b",{text:"開場："}), s.opening), el("div",{}, el("b",{text:"聯繫重點："})), ul, s.avoid ? el("div",{}, el("b",{text:"避免："}), s.avoid) : null);
+}
+function renderStore(){
+  clear();
+  const open = cases.filter(c=>c.status!=="已結案");
+  const todo = cases.filter(c=>c.status==="待聯繫");
+  app.append(el("div",{class:"panel"},
+    el("h1",{style:"font-size:24px;margin:0 0 4px",text:"門市後台｜關懷個案"}),
+    el("p",{class:"muted",style:"margin:0",text:"示範資料。個案以編號顯示，不顯示飼主姓名與電話。"}),
+    el("div",{class:"kpis"},
+      el("div",{class:"kpi"}, el("b",{text:String(open.length)}), el("span",{text:"追蹤中個案"})),
+      el("div",{class:"kpi"}, el("b",{style:"color:var(--high)",text:String(todo.length)}), el("span",{text:"待聯繫"})),
+      el("div",{class:"kpi"}, el("b",{text:String(cases.filter(c=>c.level==="高風險"&&c.status!=="已結案").length)}), el("span",{text:"高風險"})),
+      el("div",{class:"kpi"}, el("b",{text:String(cases.filter(c=>c.status==="已轉介").length)}), el("span",{text:"已轉介"}))
+    ),
+    (()=>{ const f = el("div",{class:"filters",role:"group","aria-label":"篩選"});
+      [["all","全部"],["todo","待聯繫"],["high","高風險"],["closed","已結案"]].forEach(([k,t])=>f.append(el("button",{type:"button",class:"chip","aria-pressed":storeFilter===k?"true":"false",onclick:()=>{storeFilter=k;renderStore();}},t)));
+      return f; })()
+  ));
+  let list = cases.slice().sort((a,b)=>statusRank(a.status)-statusRank(b.status) || levelRank(a.level)-levelRank(b.level));
+  if (storeFilter==="todo") list = list.filter(c=>c.status==="待聯繫");
+  if (storeFilter==="high") list = list.filter(c=>c.level==="高風險");
+  if (storeFilter==="closed") list = list.filter(c=>c.status==="已結案");
+  if (!currentCase) app.append(el("p",{class:"muted",style:"margin-top:12px",text:"提示：切回飼主端完成一次評估與關懷回覆，你的示範個案會即時出現在這裡。"}));
+  if (!list.length) app.append(el("p",{class:"muted",style:"margin-top:12px",text:"這個分類目前沒有個案。"}));
+  list.forEach(c=>{
+    const lv = c.level==="高風險"?"c-high":c.level==="中風險"?"c-mid":"c-low";
+    const card = el("div",{class:"case "+lv},
+      el("div",{class:"top"},
+        el("span",{class:"cid",text:"#"+c.id}),
+        el("span",{class:"level "+lvClass(c.level),text:c.level}),
+        c.current ? el("span",{class:"tag-now",text:"本次示範"}) : null,
+        el("span",{class:"status"+(c.status==="待聯繫"?" todo":""),text:c.status})
+      ),
+      el("p",{class:"meta",text:`${c.pet}｜${c.county}${c.store}｜評估 ${c.score} 分｜${c.day ? `第 ${c.day} 天關懷` : "剛完成評估"}`}),
+      el("p",{class:"sig"}, el("b",{text:"判讀訊號："}), c.signals.join("、")),
+      el("div",{class:"task"}, el("b",{text:"待處理："}), taskFor(c), c.referral && c.status!=="已結案" ? el("div",{}, el("b",{text:"建議轉介："}), c.referral) : null)
+    );
+    const acts = el("div",{class:"actions"});
+    const nx = nextStatus(c);
+    if (nx) acts.append(el("button",{class:"btn",onclick:()=>{ c.log.push(`店員更新狀態：${c.status} → ${nx}`); c.status=nx; renderStore(); }},`標記為${nx}`));
+    const box = el("div",{class:"script",hidden:!scriptCache[c.id]});
+    if (scriptCache[c.id]) fillScript(box, scriptCache[c.id]);
+    if (c.level!=="低風險" && c.status!=="已結案"){
+      const b = el("button",{class:"btn ghost"},"產生聯繫重點");
+      b.addEventListener("click",()=>makeScript(c, box, b));
+      acts.append(b);
+    }
+    if (acts.childNodes.length) card.append(acts);
+    card.append(box);
+    if (c.referral && c.status!=="已結案") card.append(el("details",{}, el("summary",{text:`${c.county}轉介資源`}), resourceCards(c.county, refCat(c.referral))));
+    const ul = el("ul"); c.log.forEach(t=>ul.append(el("li",{text:t})));
+    card.append(el("details",{}, el("summary",{text:`關懷紀錄（${c.log.length}）`}), ul));
+    app.append(card);
+  });
 }
 
 renderWelcome();
