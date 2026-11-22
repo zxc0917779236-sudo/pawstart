@@ -243,11 +243,11 @@ const STEPS = [
 ];
 const DIMS = ["時間陪伴","居住環境","經濟準備","家庭共識","經驗與變動"];
 const CHECKINS = {
-  7:"嗨！毛孩來家裡一週了 🐾\n吃飯、睡覺、上廁所都還順利嗎？有沒有讓你頭痛的地方？",
+  7:"嗨！毛孩來家裡一週了 🐾\n吃飯、睡覺、上廁所都還順利嗎？\n另外，晶片植入和寵物登記辦好了嗎？",
   30:"一個月了！這段時間的花費，跟你原本預期的差不多嗎？\n毛孩有沒有出現吠叫、破壞或亂尿尿的狀況？",
   90:"三個月了，最近生活有什麼變化嗎？例如工作、住處或家裡成員。\n毛孩跟大家相處得如何？"
 };
-const QUICK = ["都很順利，牠很快就適應了","牠白天一直叫，鄰居來抗議了","下個月要搬家，新房東不讓養","開銷比想像多很多，有點吃不消"];
+const QUICK = ["都很順利，寵物登記也辦好了","都很順利，但還沒辦寵物登記","牠白天一直叫，鄰居來抗議了","下個月要搬家，新房東不讓養","開銷比想像多很多，有點吃不消"];
 
 const app = document.getElementById("app");
 const modeEl = document.getElementById("mode");
@@ -648,7 +648,7 @@ function ruleEval(a){
     {category:"居家",items:["貓砂盆與貓砂","貓抓板","可躲藏的空間","窗戶與陽台防護網"]},
     {category:"外出",items:["外出提籠"]},
     {category:"清潔",items:["貓砂鏟","除臭清潔用品","梳子與指甲剪"]},
-    {category:"醫療與登記",items:["第一次健康檢查","預防針與驅蟲計畫","結紮規劃"]}
+    {category:"醫療與登記",items:["第一次健康檢查","預防針與驅蟲計畫","結紮規劃","晶片植入與寵物登記"]}
   ];
   const costs = dog ? [
     {item:"飲食",low:15000,high:30000,note:"依體型差異大"},
@@ -842,6 +842,13 @@ function viewCost(p){
 }
 
 /* ---------- Care check-in simulation ---------- */
+function regStatus(text){
+  const t = text || "";
+  if (!/(登記|晶片)/.test(t)) return null;
+  if (/(還沒|沒有|尚未|沒辦|不知道|忘了)/.test(t)) return "未完成";
+  if (/(已|好了|完成|辦好|打好)/.test(t)) return "已完成";
+  return null;
+}
 function ruleCheck(text){
   const hi = /(不讓養|不能養|送走|棄養|不要牠|養不起|放棄|吃不消|撐不下去)/;
   const mid = /(叫|抗議|咬|破壞|亂尿|亂大|生病|不吃|拉肚子|吐|花費|開銷|貴|累)/;
@@ -866,14 +873,18 @@ ${profileText(A)}
 
 風險分級：低風險＝適應良好或小困擾；中風險＝持續的照顧困擾（行為、健康、開銷、鄰居等）需要專業協助；高風險＝出現可能放棄飼養、送走或棄養的訊號。
 
-只回傳 JSON，不要其他文字：{"level":"低風險|中風險|高風險","signals":["判讀到的風險訊號，各12字內，最多3項"],"reply":"給飼主的回覆，120字內","referral":"建議轉介的資源類型（例：訓練師、獸醫、門市專人協助臨時照顧或送養），低風險時為 null","category":"vet|train|shelter|none，對應動物醫院、行為訓練、收容送養與動保機關"}`;
+若飼主表示還沒完成晶片植入與寵物登記，請在回覆中溫和提醒這是飼主的法定責任，可以就近到動物醫院辦理；不必提到押金或費用。
+
+只回傳 JSON，不要其他文字：{"level":"低風險|中風險|高風險","signals":["判讀到的風險訊號，各12字內，最多3項"],"reply":"給飼主的回覆，120字內","referral":"建議轉介的資源類型（例：訓練師、獸醫、門市專人協助臨時照顧或送養），低風險時為 null","category":"vet|train|shelter|none，對應動物醫院、行為訓練、收容送養與動保機關","registration":"done|pending|unknown，飼主是否已完成晶片植入與寵物登記"}`;
     try {
       const o = await sample.json(prompt,{modelTier:"quick",cache:false});
-      if (o && typeof o.reply==="string") j = {level:["低風險","中風險","高風險"].includes(o.level)?o.level:"中風險", signals:Array.isArray(o.signals)?o.signals.filter(s=>typeof s==="string").slice(0,3):[], reply:o.reply, referral: typeof o.referral==="string" ? o.referral : null, category: ["vet","train","shelter"].includes(o.category) ? o.category : null};
+      if (o && typeof o.reply==="string") j = {level:["低風險","中風險","高風險"].includes(o.level)?o.level:"中風險", signals:Array.isArray(o.signals)?o.signals.filter(s=>typeof s==="string").slice(0,3):[], reply:o.reply, referral: typeof o.referral==="string" ? o.referral : null, category: ["vet","train","shelter"].includes(o.category) ? o.category : null, reg: o.registration==="done" ? "已完成" : o.registration==="pending" ? "未完成" : null};
     } catch(e){ if (e && e.code==="not_granted") aiBlocked = true; }
   }
   if (!j) j = ruleCheck(text);
   if (!j.category) j.category = refCat(j.referral);
+  if (!j.reg) j.reg = regStatus(text);
+  if (j.reg==="未完成" && !/登記/.test(j.reply)) j.reply += "\n\n提醒你：晶片植入與寵物登記是飼主的法定責任，可以就近到動物醫院辦理。";
   chat.push({who:"bot",text:j.reply});
   chat.push({who:"sys",j});
   updateCase(text, j);
@@ -893,6 +904,7 @@ function viewCare(p){
         el("span",{class:"tagline",text:"系統端判讀（正式版只顯示在門市後台）"}),
         el("div",{}, el("b",{text:"風險等級："}), el("span",{style:`color:${j.level==="低風險"?"var(--low)":j.level==="中風險"?"var(--mid)":"var(--high)"};font-weight:700`,text:j.level})),
         j.signals.length ? el("div",{}, el("b",{text:"判讀訊號："}), j.signals.join("、")) : null,
+        j.reg ? el("div",{}, el("b",{text:"寵物登記："}), j.reg) : null,
         el("div",{}, el("b",{text:"後續行動："}), j.referral || "持續定期關懷"),
         j.category ? el("button",{class:"btn ghost",style:"margin-right:6px",onclick:()=>openResources(j.category)},"查看轉介資源") : null,
         el("button",{class:"btn ghost",onclick:()=>{view="store";showView();}},"在門市後台查看")
@@ -916,11 +928,11 @@ let view = "owner", currentCase = null, storeFilter = "all";
 const scriptCache = {};
 
 const SEED = [
-  {id:"0412", county:"彰化縣", pet:"狗・柴犬・成年", store:"A 店", score:62, day:30, level:"中風險", signals:["白天持續吠叫","鄰居抱怨"], referral:"轉介訓練師諮詢", status:"待聯繫", log:["評估完成：62 分（中風險）","第 7 天：適應良好","第 30 天：回報白天一直叫，鄰居來抗議"]},
-  {id:"0377", county:"雲林縣", pet:"狗・米克斯・成年", store:"B 店", score:49, day:90, level:"高風險", signals:["開銷吃緊","提到考慮送走"], referral:"門市專人聯繫，協助臨時照顧或送養資源", status:"已聯繫", log:["評估完成：49 分（高風險）","第 30 天：花費比預期多","第 90 天：回覆考慮把狗送走","店員已電話聯繫，約定週末到店討論"]},
-  {id:"0365", county:"彰化縣", pet:"貓・米克斯・成年", store:"A 店", score:71, day:30, level:"中風險", signals:["亂尿尿"], referral:"轉介獸醫檢查", status:"已轉介", log:["評估完成：71 分（中風險）","第 30 天：回報貓咪在床上尿尿","已轉介合作動物醫院檢查"]},
-  {id:"0398", county:"雲林縣", pet:"貓・米克斯・幼年", store:"C 店", score:78, day:7, level:"低風險", signals:["適應良好"], referral:null, status:"定期關懷", log:["評估完成：78 分（低風險）","第 7 天：吃睡正常，已會用貓砂"]},
-  {id:"0351", county:"彰化縣", pet:"狗・貴賓・幼年", store:"B 店", score:85, day:90, level:"低風險", signals:["適應良好"], referral:null, status:"已結案", log:["評估完成：85 分（低風險）","第 90 天：一切順利，完成三個月關懷"]}
+  {id:"0412", reg:"已完成", county:"彰化縣", pet:"狗・柴犬・成年", store:"A 店", score:62, day:30, level:"中風險", signals:["白天持續吠叫","鄰居抱怨"], referral:"轉介訓練師諮詢", status:"待聯繫", log:["評估完成：62 分（中風險）","第 7 天：適應良好","第 30 天：回報白天一直叫，鄰居來抗議"]},
+  {id:"0377", reg:"已完成", county:"雲林縣", pet:"狗・米克斯・成年", store:"B 店", score:49, day:90, level:"高風險", signals:["開銷吃緊","提到考慮送走"], referral:"門市專人聯繫，協助臨時照顧或送養資源", status:"已聯繫", log:["評估完成：49 分（高風險）","第 30 天：花費比預期多","第 90 天：回覆考慮把狗送走","店員已電話聯繫，約定週末到店討論"]},
+  {id:"0365", reg:"未完成", county:"彰化縣", pet:"貓・米克斯・成年", store:"A 店", score:71, day:30, level:"中風險", signals:["亂尿尿"], referral:"轉介獸醫檢查", status:"已轉介", log:["評估完成：71 分（中風險）","第 30 天：回報貓咪在床上尿尿","已轉介合作動物醫院檢查"]},
+  {id:"0398", reg:"未完成", county:"雲林縣", pet:"貓・米克斯・幼年", store:"C 店", score:78, day:7, level:"低風險", signals:["適應良好"], referral:null, status:"定期關懷", log:["評估完成：78 分（低風險）","第 7 天：吃睡正常，已會用貓砂"]},
+  {id:"0351", reg:"已完成", county:"彰化縣", pet:"狗・貴賓・幼年", store:"B 店", score:85, day:90, level:"低風險", signals:["適應良好"], referral:null, status:"已結案", log:["評估完成：85 分（低風險）","第 90 天：一切順利，完成三個月關懷"]}
 ];
 let cases = SEED.map(c=>({...c, signals:[...c.signals], log:[...c.log]}));
 const FLOW_RISK = ["待聯繫","已聯繫","已轉介","已結案"], FLOW_LOW = ["定期關懷","已結案"];
@@ -936,17 +948,18 @@ function showView(){
 function petLabel(){ return `${A.species||"未填"}・${A.breed||"品種未定"}・${(A.age||"未填").replace(/（.*）/,"")}`; }
 function makeCurrentCase(){
   cases = cases.filter(c=>!c.current);
-  currentCase = {id:"0420", current:true, county:A.county||"彰化縣", pet:petLabel(), store:"A 店", score:result.score, day:0, level:result.level,
+  currentCase = {id:"0420", current:true, reg:"未確認", county:A.county||"彰化縣", pet:petLabel(), store:"A 店", score:result.score, day:0, level:result.level,
     signals: result.risks.length ? result.risks.map(r=>r.title).slice(0,3) : ["條件準備充足"], referral:null,
     status: result.level==="高風險" ? "待聯繫" : "定期關懷", log:[`評估完成：${result.score} 分（${result.level}）`]};
   cases.unshift(currentCase);
 }
 function updateCase(text, j){
-  if (willSave() && caseNo) postSheet("checkin", [caseNo, chatDay, text, j.level, (j.signals||[]).join("、"), j.referral||""]);
+  if (willSave() && caseNo) postSheet("checkin", [caseNo, chatDay, text, j.level, (j.signals||[]).concat(j.reg?["寵物登記："+j.reg]:[]).join("、"), j.referral||""]);
   if (!currentCase) return;
   Object.assign(currentCase, {day:chatDay, level:j.level, signals:j.signals.length?j.signals:["無明顯風險訊號"], referral:j.referral,
     status: j.level==="低風險" ? "定期關懷" : "待聯繫"});
-  currentCase.log.push(`第 ${chatDay} 天：飼主回覆「${text}」，判讀為${j.level}`);
+  if (j.reg) currentCase.reg = j.reg;
+  currentCase.log.push(`第 ${chatDay} 天：飼主回覆「${text}」，判讀為${j.level}${j.reg?`，寵物登記${j.reg}`:""}`);
   delete scriptCache[currentCase.id];
 }
 function taskFor(c){
@@ -1000,16 +1013,17 @@ function renderStore(){
       el("div",{class:"kpi"}, el("b",{text:String(open.length)}), el("span",{text:"追蹤中個案"})),
       el("div",{class:"kpi"}, el("b",{style:"color:var(--high)",text:String(todo.length)}), el("span",{text:"待聯繫"})),
       el("div",{class:"kpi"}, el("b",{text:String(cases.filter(c=>c.level==="高風險"&&c.status!=="已結案").length)}), el("span",{text:"高風險"})),
-      el("div",{class:"kpi"}, el("b",{text:String(cases.filter(c=>c.status==="已轉介").length)}), el("span",{text:"已轉介"}))
+      el("div",{class:"kpi"}, el("b",{text:String(cases.filter(c=>c.reg==="未完成"&&c.status!=="已結案").length)}), el("span",{text:"登記未完成"}))
     ),
     (()=>{ const f = el("div",{class:"filters",role:"group","aria-label":"篩選"});
-      [["all","全部"],["todo","待聯繫"],["high","高風險"],["closed","已結案"]].forEach(([k,t])=>f.append(el("button",{type:"button",class:"chip","aria-pressed":storeFilter===k?"true":"false",onclick:()=>{storeFilter=k;renderStore();}},t)));
+      [["all","全部"],["todo","待聯繫"],["high","高風險"],["reg","登記未完成"],["closed","已結案"]].forEach(([k,t])=>f.append(el("button",{type:"button",class:"chip","aria-pressed":storeFilter===k?"true":"false",onclick:()=>{storeFilter=k;renderStore();}},t)));
       return f; })()
   ));
   let list = cases.slice().sort((a,b)=>statusRank(a.status)-statusRank(b.status) || levelRank(a.level)-levelRank(b.level));
   if (storeFilter==="todo") list = list.filter(c=>c.status==="待聯繫");
   if (storeFilter==="high") list = list.filter(c=>c.level==="高風險");
   if (storeFilter==="closed") list = list.filter(c=>c.status==="已結案");
+  if (storeFilter==="reg") list = list.filter(c=>c.reg==="未完成"&&c.status!=="已結案");
   if (!currentCase) app.append(el("p",{class:"muted",style:"margin-top:12px",text:"提示：切回飼主端完成一次評估與關懷回覆，你的示範個案會即時出現在這裡。"}));
   if (!list.length) app.append(el("p",{class:"muted",style:"margin-top:12px",text:"這個分類目前沒有個案。"}));
   list.forEach(c=>{
@@ -1023,11 +1037,14 @@ function renderStore(){
       ),
       el("p",{class:"meta",text:`${c.pet}｜${c.county}${c.store}｜評估 ${c.score} 分｜${c.day ? `第 ${c.day} 天關懷` : "剛完成評估"}`}),
       el("p",{class:"sig"}, el("b",{text:"判讀訊號："}), c.signals.join("、")),
-      el("div",{class:"task"}, el("b",{text:"待處理："}), taskFor(c), c.referral && c.status!=="已結案" ? el("div",{}, el("b",{text:"建議轉介："}), c.referral) : null)
+      el("p",{class:"sig"}, el("b",{text:"寵物登記："}), c.reg||"未確認"),
+      el("div",{class:"task"}, el("b",{text:"待處理："}), taskFor(c), c.referral && c.status!=="已結案" ? el("div",{}, el("b",{text:"建議轉介："}), c.referral) : null,
+        c.reg!=="已完成" && c.status!=="已結案" ? el("div",{}, el("b",{text:"登記提醒："}), c.reg==="未完成" ? "飼主尚未完成晶片植入與寵物登記，請提醒並說明可到動物醫院辦理" : "第 7 天關懷時確認是否完成寵物登記") : null)
     );
     const acts = el("div",{class:"actions"});
     const nx = nextStatus(c);
     if (nx) acts.append(el("button",{class:"btn",onclick:()=>{ c.log.push(`店員更新狀態：${c.status} → ${nx}`); c.status=nx; renderStore(); }},`標記為${nx}`));
+    if (c.reg!=="已完成" && c.status!=="已結案") acts.append(el("button",{class:"btn ghost",onclick:()=>{ c.reg="已完成"; c.log.push("店員確認已完成晶片植入與寵物登記"); renderStore(); }},"標記登記已完成"));
     const box = el("div",{class:"script",hidden:!scriptCache[c.id]});
     if (scriptCache[c.id]) fillScript(box, scriptCache[c.id]);
     if (c.level!=="低風險" && c.status!=="已結案"){
