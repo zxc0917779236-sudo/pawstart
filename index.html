@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>PawStart 毛孩好起點｜飼養適配評估</title>
+<title>PawStart 毛孩好起點｜飼養適配評估原型</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
@@ -81,7 +81,7 @@ input[type=text],textarea{width:100%;border:1.5px solid var(--line);background:v
 .dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
 @keyframes b{0%,80%,100%{transform:scale(.5);opacity:.4}40%{transform:scale(1);opacity:1}}
 
-.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 52px);z-index:4}
+.tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 52px);z-index:4}
 .tab{border:0;background:transparent;color:var(--muted);border-radius:10px;padding:9px 2px;font-size:13px;font-weight:700}
 .tab[aria-selected="true"]{background:var(--brand);color:var(--brandInk)}
 
@@ -205,14 +205,12 @@ select{width:100%;border:1.5px solid var(--line);background:var(--surface2);colo
 </style>
 </head>
 <body>
-<header><div class="bar"><div class="logo">PawStart<small>毛孩好起點</small></div><span class="mode" id="mode">東森寵物</span><button class="viewbtn" id="viewBtn" type="button" hidden>門市端</button></div></header>
+<header><div class="bar"><div class="logo">PawStart<small>毛孩好起點</small></div><span class="mode" id="mode">公開示範版</span><button class="viewbtn" id="viewBtn" type="button">門市端</button></div></header>
 <main id="app" aria-live="polite"></main>
 
 <script>
 (function(){
 "use strict";
-const STORES = {mailiao:"麥寮中興店", huwei:"虎尾林森店", tianzhong:"田中福安店"};
-const STORE_NAME = STORES[(location.hash||"").replace("#","")] || "";
 const STEPS = [
   {title:"想養的毛孩", hint:"先說說你想帶回家的是誰。", fields:[
     {k:"species", label:"種類", type:"single", opts:["狗","貓"]},
@@ -262,7 +260,8 @@ if (window.claude && typeof window.claude.use === "function") {
   window.claude.use("sample").then(s => { sample = s; setMode(); }).catch(() => {});
 }
 function setMode(){
-  modeEl.textContent = STORE_NAME ? "東森寵物 " + STORE_NAME : "東森寵物";
+  if (result) modeEl.textContent = usedAI ? "AI 判讀" : "規則示範模式";
+  else modeEl.textContent = (sample && !aiBlocked) ? "AI 已連線" : "公開示範版";
 }
 function el(tag, attrs, ...kids){
   const n = document.createElement(tag);
@@ -283,12 +282,13 @@ function renderWelcome(){
   app.append(el("div",{class:"panel"},
     el("div",{class:"hero-paw","aria-hidden":"true"},"🐾"),
     el("h1",{text:"帶毛孩回家前，花 5 分鐘確認你們合不合拍"}),
-    el("p",{text:"回答 6 組簡單問題，系統會根據你的生活條件，指出需要先準備的地方，並幫你整理第一年的準備清單與花費。"}),
+    el("p",{text:"回答 6 組簡單問題，AI 會根據你的生活條件，指出需要先準備的地方，並幫你整理第一年的準備清單與花費。"}),
     el("ul",{class:"promises"},
       el("li",{}, el("b",{text:"適配評估　"}), "看看時間、空間、預算與家人是否準備好了"),
       el("li",{}, el("b",{text:"準備清單　"}), "依毛孩年齡與你的居住條件，列出要準備的品類"),
       el("li",{}, el("b",{text:"關懷陪伴　"}), "帶回家後第 7、30、90 天，主動問候與提供協助")
     ),
+    el("p",{class:"notice",text:"這是公開示範版：評估結果由內建規則計算。正式版由 AI 依品種特性判讀並解讀飼主回覆，請參考 Demo 影片。"}),
     el("button",{class:"btn",onclick:()=>{step=0;renderStep();}},"開始評估"),
     el("button",{class:"btn ghost",style:"margin-top:10px",onclick:()=>{guideTab="adopt";resCat=null;renderGuidePage();}},"先看飼養須知"),
     el("p",{class:"foot",text:SHEET_ENDPOINT ? "評估結果是幫你做準備，不是審查。只有選擇接收關懷時才需要留下聯絡方式。" : "評估結果是幫你做準備，不是審查。不需要填寫姓名或電話。"})
@@ -753,7 +753,7 @@ async function evaluate(){
   if (willSave()){
     const care = PD.care && PD.agree;
     saveState = "sending";
-    postSheet("pilot", [caseNo, STORE_NAME||"未指定門市", A.county, A.species, A.breed||"", A.age, A.housing, A.space, A.landlord, A.companion, A.away, A.monthly, A.emergency,
+    postSheet("evaluation", [caseNo, A.county, A.species, A.breed||"", A.age, A.housing, A.space, A.landlord, A.companion, A.away, A.monthly, A.emergency,
       (A.members||[]).join("、"), A.consent, A.allergy, A.experience, (A.changes||[]).join("、"), result.score, result.level,
       result.risks.map(r=>r.title).join("、"), (result.matches||[]).map(m=>m.type).join("、"), usedAI?"AI":"規則",
       care?"是":"否", care?PD.name.trim():"", care?PD.phone.trim():"", care?new Date().toISOString():""])
@@ -771,7 +771,7 @@ const fmt = n => n.toLocaleString("zh-TW");
 function renderResult(){
   clear();
   const tabs = el("div",{class:"tabs",role:"tablist"});
-  [["result","評估結果"],["list","準備清單"],["cost","費用估算"],["guide","飼養須知"]].forEach(([k,t])=>{
+  [["result","評估結果"],["list","準備清單"],["cost","費用估算"],["care","關懷陪伴"],["guide","飼養須知"]].forEach(([k,t])=>{
     tabs.append(el("button",{class:"tab",role:"tab","aria-selected":tab===k?"true":"false",onclick:()=>{tab=k;renderResult();}},t));
   });
   app.append(tabs);
@@ -783,7 +783,7 @@ function renderResult(){
   if (tab==="guide") viewGuide(p);
   app.append(p);
   app.append(el("div",{class:"row",style:"margin-top:14px"}, el("button",{class:"btn ghost",onclick:()=>{A={members:[],changes:[]};result=null;step=-1;cases=cases.filter(c=>!c.current);currentCase=null;PD={share:false,care:false,name:"",phone:"",agree:false};caseNo=null;saveState="";setMode();renderWelcome();}},"重新評估")));
-  app.append(el("p",{class:"foot",text:"評估結果僅供參考，不取代獸醫或專業人員的建議。"}));
+  app.append(el("p",{class:"foot",text:"原型展示用。評估結果僅供參考，不取代獸醫或專業人員的建議。"}));
 }
 function viewScore(p){
   const r = result, C = 2*Math.PI*50, off = C*(1-r.score/100);
@@ -1061,7 +1061,6 @@ function renderStore(){
   });
 }
 
-setMode();
 renderWelcome();
 })();
 </script>
